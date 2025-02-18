@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextStyle">
+        <item name="android:fontFamily">@font/jalnan</item>
+    </style>
+
+    <style name="TextStyle.Title">
+        <item name="android:fontFamily">@font/jalnan</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="TextStyle.Body">
+        <item name="android:fontFamily">@font/jeongi_anjunche</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextStyle.Title2">
+        <item name="android:fontFamily">@font/jalnan</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+        <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+            <item name="colorPrimary">@color/main_green</item>
+            <item name="colorPrimaryDark">@color/sub_green</item>
+            <item name="colorAccent">@color/white</item>
+            <item name="android:windowFullscreen">true</item>
+        </style>
+
+
+</resources>

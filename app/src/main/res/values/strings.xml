@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GreenLens</string>
+    <!-- 메인 화면 -->
+    <string name="main_title">분리수거 목록</string>
+    <string name="category_paper">종이류</string>
+    <string name="category_plastic">비닐류</string>
+
+    <!-- 카메라 화면 -->
+    <string name="camera_guide">물체를 카메라에 비춰주세요</string>
+
+    <!-- 포인트 화면 -->
+    <string name="point_total">총 포인트</string>
+    <string name="point_exchange">포인트 교환</string>
+</resources>
