@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/main_title"
-        style="@style/TextStyle.Title"
+        style="@style/TextSubtitle"
         android:layout_marginBottom="16dp" />
 
     <Button
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/category_paper"
-        style="@style/TextStyle.Title2"
+        style="@style/TextSubtitle"
         android:layout_marginBottom="8dp" />
 
     <Button
@@ -25,6 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/category_plastic"
-        style="@style/TextStyle.Title2" />
+        style="@style/TextSubtitle" />
 
 </LinearLayout>

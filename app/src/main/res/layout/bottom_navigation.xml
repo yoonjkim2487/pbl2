@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background">
+    android:elevation="8dp"
+    android:translationZ="8dp"
+    android:background="@android:color/transparent">
 
     <include
         android:id="@+id/title_bar"
@@ -12,18 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="분리배출방법"
-        android:textColor="@color/white"
-        style="@style/TextStyle.Title"
-        app:layout_constraintBottom_toBottomOf="@id/title_bar"
-        app:layout_constraintEnd_toEndOf="@id/title_bar"
-        app:layout_constraintStart_toStartOf="@id/title_bar"
-        app:layout_constraintTop_toTopOf="@id/title_bar" />
 
     <!-- Body 부분 -->
     <LinearLayout
@@ -81,16 +71,17 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/bottom_bar_vector"
+            android:background="@drawable/bottom_bar"
             android:orientation="horizontal"
-            android:weightSum="5">
+            android:weightSum="5"
+            android:paddingHorizontal="15dp">
 
             <ImageView
                 android:id="@+id/btn_home"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="18dp"
+                android:padding="20dp"
                 android:src="@drawable/ic_home" />
 
             <ImageView
@@ -98,8 +89,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="18dp"
-                android:src="@drawable/ic_map" />
+                android:padding="20dp"
+                android:src="@drawable/ic_search" />
 
             <!-- 카메라 버튼 자리 -->
             <View
@@ -112,15 +103,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="18dp"
-                android:src="@drawable/ic_notification" />
+                android:padding="20dp"
+                android:src="@drawable/ic_shop" />
 
             <ImageView
                 android:id="@+id/btn_profile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="18dp"
+                android:padding="20dp"
                 android:src="@drawable/ic_profile" />
         </LinearLayout>
     </FrameLayout>
