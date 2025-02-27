@@ -13,12 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/Theme.GreenLens">
 
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.GreenLens">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,7 +27,9 @@
 
         <activity
             android:name=".view.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.GreenLens">
+
         </activity>
         <!-- CouponHistoryActivity 추가 -->
         <activity
@@ -47,6 +49,11 @@
         <activity
             android:name=".view.PointHistoryActivity"
             android:exported="false" />
+
+        <activity android:name=".view.PaperRecycleActivity" android:exported="false" />
+        <activity android:name=".view.PlasticRecycleActivity" android:exported="false" />
+        <activity android:name=".view.GlassRecycleActivity" android:exported="false" />
+        <!-- ... 다른 액티비티들도 등록 -->
 
 
 

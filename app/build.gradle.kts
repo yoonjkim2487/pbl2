@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata:2.6.1")
 
+    implementation("com.google.android.material:material:1.11.0")
     // 카메라X
     implementation("androidx.camera:camera-camera2:1.2.2")
     implementation("androidx.camera:camera-lifecycle:1.2.2")

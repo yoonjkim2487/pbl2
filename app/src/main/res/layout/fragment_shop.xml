@@ -176,10 +176,4 @@
         app:layout_constraintTop_toBottomOf="@id/text_all_title"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <!-- 하단 여백용 View -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
