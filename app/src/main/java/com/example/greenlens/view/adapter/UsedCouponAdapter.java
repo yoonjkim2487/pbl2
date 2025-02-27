@@ -57,8 +57,12 @@ public class UsedCouponAdapter extends RecyclerView.Adapter<UsedCouponAdapter.Co
         }
 
         public void bind(Coupon coupon) {
-            brandText.setText(coupon.getBrand());
-            nameText.setText(coupon.getName());
+            String formattedName = String.format("[%s] %s",
+                    coupon.getBrandName(),
+                    coupon.getProductName());  // getName() -> getProductName()으로 수정
+
+            brandText.setText(coupon.getBrandName());
+            nameText.setText(formattedName);
             dateText.setText(coupon.getExpireDate() + "까지");
 
             if (coupon.getImageResId() != 0) {

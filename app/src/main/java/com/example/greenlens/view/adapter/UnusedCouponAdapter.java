@@ -69,8 +69,12 @@ public class UnusedCouponAdapter extends RecyclerView.Adapter<UnusedCouponAdapte
         }
 
         public void bind(Coupon coupon, OnCouponClickListener listener) {
-            brandText.setText(coupon.getBrand());
-            nameText.setText(coupon.getName());
+            String formattedName = String.format("[%s] %s",
+                    coupon.getBrandName(),
+                    coupon.getProductName());
+
+            brandText.setText(coupon.getBrandName());
+            nameText.setText(formattedName);
             dateText.setText(coupon.getExpireDate() + "까지");
 
             if (coupon.getImageResId() != 0) {

@@ -71,7 +71,7 @@ public class ShopDetailActivity extends AppCompatActivity {
                     coupon.getProductName()));
 
             // 포인트 설정
-            textPoint.setText(String.format("%dP", coupon.getPoint()));
+            textPoint.setText(String.format("%dP", coupon.getPoints()));
 
             // 유효기간 설정
             textValidity.setText(String.format("유효기간 %d일",

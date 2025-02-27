@@ -27,14 +27,14 @@ public class SplashActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_splash);
 
-            // 3초 후에 ShopActivity로 이동
+            // 3초 후에 MainActivity로 이동
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 try {
-                    Intent intent = new Intent(SplashActivity.this, ShopActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 } catch (Exception e) {
-                    Log.e("SplashActivity", "Error starting ShopActivity: " + e.getMessage());
+                    Log.e("SplashActivity", "Error starting MainActivity: " + e.getMessage());
                 }
             }, 3000);
         } catch (Exception e) {

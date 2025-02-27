@@ -7,6 +7,7 @@ android {
     android {
         packaging {
             resources {
+                pickFirsts.add ("mozilla/public-suffix-list.txt")
                 excludes.add("META-INF/INDEX.LIST")
                 excludes.add("META-INF/DEPENDENCIES")
                 excludes.add("META-INF/LICENSE")

@@ -17,7 +17,8 @@
 
         <activity
             android:name=".view.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,21 +27,13 @@
 
         <activity
             android:name=".view.MainActivity"
-            android:exported="false" />
-
-        <!-- ShopActivity 추가 -->
-        <activity
-            android:name=".view.ShopActivity"
-            android:exported="false" />
+            android:exported="true">
+        </activity>
         <!-- CouponHistoryActivity 추가 -->
         <activity
             android:name=".view.CouponHistoryActivity"
             android:exported="false" />
 
-        <!-- CameraActivity 추가 -->
-        <activity
-            android:name=".view.CameraActivity"
-            android:exported="false" />
 
         <!-- ShopDetailActivity 추가 -->
         <activity
@@ -48,6 +41,12 @@
             android:exported="false" />
 
         <activity
+            android:name=".view.CouponActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.PointHistoryActivity"
+            android:exported="false" />
 
 
 

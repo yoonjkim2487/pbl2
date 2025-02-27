@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_image"
     android:layout_width="150dp"
-    android:layout_height="183dp"
+    android:layout_height="200dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp"
@@ -30,22 +30,19 @@
 
         <TextView
             android:id="@+id/text_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="19dp"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:fontFamily="@font/jalnan"/>
-
-        <TextView
-            android:id="@+id/text_brand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="19dp"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:visibility="gone"
-        android:fontFamily="@font/jalnan"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:fontFamily="@font/jalnan"
+            android:maxLines="2"
+            android:minLines="2"
+            android:ellipsize="end"
+            android:breakStrategy="balanced"
+            android:hyphenationFrequency="none"
+            android:lineSpacingExtra="2dp"
+            android:gravity="top"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
