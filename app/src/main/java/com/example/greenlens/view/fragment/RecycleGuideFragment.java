@@ -42,47 +42,33 @@ public class RecycleGuideFragment extends Fragment {
         switch(type) {
             case "glass":
                 binding.textTitle.setText("유리병류");
-                View glassContent = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.fragment_glass_recycle, binding.layoutContent, false);
-                binding.layoutContent.removeAllViews();
-                binding.layoutContent.addView(glassContent);
+                View glassContent = getLayoutInflater()
+                        .inflate(R.layout.fragment_glass_recycle, binding.layoutContent, true);
                 break;
             case "paper":
                 binding.textTitle.setText("종이류");
-                View paperContent = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.fragment_paper_recycle, binding.layoutContent, false);
-                binding.layoutContent.removeAllViews();
-                binding.layoutContent.addView(paperContent);
+                View paperContent = getLayoutInflater()
+                        .inflate(R.layout.fragment_paper_recycle, binding.layoutContent, true);
                 break;
             case "plastic":
                 binding.textTitle.setText("플라스틱 용기류");
-                View plasticContent = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.fragment_plastic_recycle, binding.layoutContent, false);
-                binding.layoutContent.removeAllViews();
-                binding.layoutContent.addView(plasticContent);
+                View plasticContent = getLayoutInflater()
+                        .inflate(R.layout.fragment_plastic_recycle, binding.layoutContent, true);
                 break;
             case "vinyl":
                 binding.textTitle.setText("비닐류");
-                View vinylContent = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.fragment_vinyl_recycle, binding.layoutContent, false);
-                binding.layoutContent.removeAllViews();
-                binding.layoutContent.addView(vinylContent);
+                View vinylContent = getLayoutInflater()
+                        .inflate(R.layout.fragment_vinyl_recycle, binding.layoutContent, true);
                 break;
-
             case "metal":
                 binding.textTitle.setText("금속캔");
-                View metalContent = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.fragment_metal_recycle, binding.layoutContent, false);
-                binding.layoutContent.removeAllViews();
-                binding.layoutContent.addView(metalContent);
+                View metalContent = getLayoutInflater()
+                        .inflate(R.layout.fragment_metal_recycle, binding.layoutContent, true);
                 break;
-
             case "styrofoam":
                 binding.textTitle.setText("스티로폼");
-                View styrofoamContent = LayoutInflater.from(requireContext())
-                        .inflate(R.layout.fragment_styrofoam_recycle, binding.layoutContent, false);
-                binding.layoutContent.removeAllViews();
-                binding.layoutContent.addView(styrofoamContent);
+                View styrofoamContent = getLayoutInflater()
+                        .inflate(R.layout.fragment_styrofoam_recycle, binding.layoutContent, true);
                 break;
         }
     }
