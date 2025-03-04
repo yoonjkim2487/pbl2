@@ -103,8 +103,9 @@ public class MainActivity extends AppCompatActivity {
     public void hideBottomNavigation() {
         if (binding.mainBottomNav != null) {
             binding.mainBottomNav.setVisibility(View.GONE);
-            // FAB 버튼도 함께 숨기기
             binding.mainFloatingAddBtn.setVisibility(View.GONE);
+            // 하단 네비게이션 배경도 함께 숨기기
+            binding.mainBottomNav.setBackground(null);
         }
     }
 

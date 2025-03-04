@@ -1,11 +1,16 @@
 package com.example.greenlens.view.fragment;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +35,10 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import java.io.IOException;
+
 public class CameraFragment extends Fragment {
     private static final String TAG = "CameraFragment";
     private static final int REQUEST_CODE_PERMISSIONS = 10;
@@ -38,6 +47,9 @@ public class CameraFragment extends Fragment {
     private PreviewView viewFinder;
     private ImageCapture imageCapture;
     private FloatingActionButton captureButton;
+
+    private ImageView capturedImageView; // 추가
+    private View overlayView;
 
     @Nullable
     @Override
@@ -51,6 +63,8 @@ public class CameraFragment extends Fragment {
 
         viewFinder = view.findViewById(R.id.viewFinder);
         captureButton = view.findViewById(R.id.btnCapture);
+        capturedImageView = view.findViewById(R.id.capturedImageView);
+        overlayView = view.findViewById(R.id.overlayView);
 
         // MainActivity의 하단 내비바 숨기기
         if (getActivity() instanceof MainActivity) {
@@ -98,6 +112,8 @@ public class CameraFragment extends Fragment {
 
                 imageCapture = new ImageCapture.Builder()
                         .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                        .setTargetRotation(requireActivity().getWindowManager()
+                                .getDefaultDisplay().getRotation())
                         .build();
 
                 CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
@@ -123,6 +139,11 @@ public class CameraFragment extends Fragment {
             return;
         }
 
+        // 촬영 시작 시 UI 업데이트
+        captureButton.setEnabled(false);
+        overlayView.setVisibility(View.VISIBLE);
+        Toast.makeText(requireContext(), "사진을 촬영중입니다...", Toast.LENGTH_SHORT).show();
+
         File photoFile = new File(
                 getOutputDirectory(),
                 new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
@@ -138,9 +159,14 @@ public class CameraFragment extends Fragment {
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults output) {
-                        analyzeImage(photoFile);
-                        // 버튼 다시 활성화
-                        captureButton.setEnabled(true);
+                        // 촬영된 사진 표시
+                        showCapturedImage(photoFile);
+
+                        // 1.5초 후 결과창 표시
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            overlayView.setVisibility(View.GONE);
+                            analyzeImage(photoFile);
+                        }, 1500);
                     }
 
                     @Override
@@ -148,7 +174,7 @@ public class CameraFragment extends Fragment {
                         Log.e(TAG, "Photo capture failed: " + exception.getMessage());
                         Toast.makeText(requireContext(),
                                 "사진 촬영에 실패했습니다.", Toast.LENGTH_SHORT).show();
-                        // 버튼 다시 활성화
+                        overlayView.setVisibility(View.GONE);
                         captureButton.setEnabled(true);
                     }
                 }
@@ -182,6 +208,53 @@ public class CameraFragment extends Fragment {
             }
         }
         return true;
+    }
+
+    private void showCapturedImage(File photoFile) {
+        // PreviewView 숨기기
+        viewFinder.setVisibility(View.GONE);
+
+        // 촬영된 이미지 표시
+        capturedImageView.setVisibility(View.VISIBLE);
+
+        // 이미지 회전 및 비율 조정
+        Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+
+        // EXIF 정보로부터 이미지 회전 각도 얻기
+        int rotation = getImageRotation(photoFile);
+
+        // 이미지 회전
+        if (rotation != 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotation);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        }
+
+        capturedImageView.setImageBitmap(bitmap);
+        captureButton.setEnabled(true);
+    }
+
+    private int getImageRotation(File imageFile) {
+        try {
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    return 90;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    return 180;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    return 270;
+                default:
+                    return 0;
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error getting image rotation: " + e.getMessage());
+            return 0;
+        }
     }
 
     @Override

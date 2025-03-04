@@ -61,33 +61,38 @@ public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
     private void setupResultView(String type, ImageView iconView,
                                  TextView titleView, TextView descView) {
         switch (type) {
-            case "plastic":
-                iconView.setImageResource(R.drawable.ic_plastic);
-                titleView.setText("플라스틱");
+            case "pet":
+                iconView.setImageResource(R.drawable.ic_plastic_detail);
+                titleView.setText("페트병");
                 descView.setText("무색 투명한 먹는샘물, 음료\n폴리에틸렌테레프탈레이트(PET)병");
                 break;
+            case "plastic":
+                iconView.setImageResource(R.drawable.ic_plastic_detail);
+                titleView.setText("플라스틱 용기류");
+                descView.setText("요구르트병, 샴푸통, 세제통 등\n플라스틱으로 된 재활용품");
+                break;
             case "paper":
-                iconView.setImageResource(R.drawable.ic_paper);
+                iconView.setImageResource(R.drawable.ic_paper_detail);
                 titleView.setText("종이류");
                 descView.setText("신문, 책자, 노트 등\n종이로 된 재활용품");
                 break;
             case "glass":
-                iconView.setImageResource(R.drawable.ic_glass);
+                iconView.setImageResource(R.drawable.ic_glass_detail);
                 titleView.setText("유리병류");
                 descView.setText("음료수병, 기타병류\n유리로 된 재활용품");
                 break;
             case "can":
-                iconView.setImageResource(R.drawable.ic_can);
+                iconView.setImageResource(R.drawable.ic_metal_detail);
                 titleView.setText("캔류");
                 descView.setText("알루미늄캔, 철캔\n캔으로 된 재활용품");
                 break;
             case "vinyl":
-                iconView.setImageResource(R.drawable.ic_vinyl);
+                iconView.setImageResource(R.drawable.ic_vinyl_detail);
                 titleView.setText("비닐류");
                 descView.setText("과자봉지, 라면봉지\n비닐로 된 재활용품");
                 break;
             case "styrofoam":
-                iconView.setImageResource(R.drawable.ic_styrofoam);
+                iconView.setImageResource(R.drawable.ic_styrofoam_detail);
                 titleView.setText("스티로폼");
                 descView.setText("스티로폼 포장재\n스티로폼으로 된 재활용품");
                 break;
