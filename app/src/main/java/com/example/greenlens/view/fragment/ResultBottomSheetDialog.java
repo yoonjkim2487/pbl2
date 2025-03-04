@@ -1,6 +1,5 @@
 package com.example.greenlens.view.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.greenlens.R;
-import com.example.greenlens.view.PlasticRecycleActivity;
+import com.example.greenlens.view.MainActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
@@ -72,22 +71,33 @@ public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
                 titleView.setText("종이류");
                 descView.setText("신문, 책자, 노트 등\n종이로 된 재활용품");
                 break;
-            // 다른 타입들도 추가
+            case "glass":
+                iconView.setImageResource(R.drawable.ic_glass);
+                titleView.setText("유리병류");
+                descView.setText("음료수병, 기타병류\n유리로 된 재활용품");
+                break;
+            case "can":
+                iconView.setImageResource(R.drawable.ic_can);
+                titleView.setText("캔류");
+                descView.setText("알루미늄캔, 철캔\n캔으로 된 재활용품");
+                break;
+            case "vinyl":
+                iconView.setImageResource(R.drawable.ic_vinyl);
+                titleView.setText("비닐류");
+                descView.setText("과자봉지, 라면봉지\n비닐로 된 재활용품");
+                break;
+            case "styrofoam":
+                iconView.setImageResource(R.drawable.ic_styrofoam);
+                titleView.setText("스티로폼");
+                descView.setText("스티로폼 포장재\n스티로폼으로 된 재활용품");
+                break;
         }
     }
 
     private void navigateToRecycleGuide(String type) {
-        Intent intent = null;
-        switch (type) {
-            case "plastic":
-                intent = new Intent(getActivity(), PlasticRecycleActivity.class);
-                break;
-            case "paper":
-                intent = new Intent(getActivity(), PaperRecycleActivity.class);
-                break;
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).showRecycleGuide(type);
         }
-        if (intent != null) {
-            startActivity(intent);
-        }
+        dismiss();
     }
 }
