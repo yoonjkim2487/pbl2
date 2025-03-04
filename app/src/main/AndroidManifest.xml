@@ -50,10 +50,6 @@
             android:name=".view.PointHistoryActivity"
             android:exported="false" />
 
-        <activity android:name=".view.PaperRecycleActivity" android:exported="false" />
-        <activity android:name=".view.PlasticRecycleActivity" android:exported="false" />
-        <activity android:name=".view.GlassRecycleActivity" android:exported="false" />
-        <!-- ... 다른 액티비티들도 등록 -->
 
 
 

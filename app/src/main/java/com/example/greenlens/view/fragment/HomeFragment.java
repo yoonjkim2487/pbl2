@@ -6,11 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
-import com.example.greenlens.R;
+
 import com.example.greenlens.databinding.FragmentHomeBinding;
-import com.example.greenlens.view.GlassRecycleActivity;
-import com.example.greenlens.view.PaperRecycleActivity;
-import com.example.greenlens.view.PlasticRecycleActivity;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;

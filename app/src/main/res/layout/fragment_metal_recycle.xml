@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="금속캔·고철류"
+            android:text="금속캔, 고철류"
             android:textColor="@color/white"
             android:textSize="25sp"
             android:gravity="center"
@@ -71,7 +71,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="철캔·알루미늄캔"
+                        android:text="철캔, 알루미늄캔"
                         android:textSize="24sp"
                         style="@style/TextTitle"/>
 
@@ -117,7 +117,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="부탄가스·살충제 용기"
+                        android:text="부탄가스, 살충제 용기"
                         android:textSize="24sp"
                         style="@style/TextTitle"/>
 

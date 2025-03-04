@@ -2,6 +2,7 @@ package com.example.greenlens.view;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,6 +13,7 @@ import com.example.greenlens.view.fragment.CameraFragment;
 import com.example.greenlens.view.fragment.HomeFragment;
 import com.example.greenlens.view.fragment.MapFragment;
 import com.example.greenlens.view.fragment.ProfileFragment;
+import com.example.greenlens.view.fragment.RecycleGuideFragment;
 import com.example.greenlens.view.fragment.ShopFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,13 +78,43 @@ public class MainActivity extends AppCompatActivity {
                 .commitAllowingStateLoss();
     }
 
+    // 분리수거 가이드 프래그먼트 표시
+    public void showRecycleGuide(String type) {
+        manager.beginTransaction()
+                .replace(R.id.main_frm, RecycleGuideFragment.newInstance(type))
+                .addToBackStack(null)  // 뒤로가기 스택에 추가
+                .commitAllowingStateLoss();
+    }
+
     @Override
     public void onBackPressed() {
         Fragment currentFragment = manager.findFragmentById(R.id.main_frm);
         if (currentFragment instanceof HomeFragment) {
             super.onBackPressed();
+        } else if (currentFragment instanceof RecycleGuideFragment) {
+            // RecycleGuideFragment에서 뒤로가기 시 스택에서 제거
+            manager.popBackStack();
         } else {
             changeFragment(new HomeFragment());
         }
     }
+
+    // 하단 내비게이션 숨기기
+    public void hideBottomNavigation() {
+        if (binding.mainBottomNav != null) {
+            binding.mainBottomNav.setVisibility(View.GONE);
+            // FAB 버튼도 함께 숨기기
+            binding.mainFloatingAddBtn.setVisibility(View.GONE);
+        }
+    }
+
+    // 하단 내비게이션 보이기
+    public void showBottomNavigation() {
+        if (binding.mainBottomNav != null) {
+            binding.mainBottomNav.setVisibility(View.VISIBLE);
+            // FAB 버튼도 함께 보이기
+            binding.mainFloatingAddBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

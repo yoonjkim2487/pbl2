@@ -42,4 +42,12 @@
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/gray</item>
     </style>
+
+    <style name="TextWarningTitle">
+        <item name="android:fontFamily">@font/jalnan</item>
+        <item name="fontFamily">@font/jalnan</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

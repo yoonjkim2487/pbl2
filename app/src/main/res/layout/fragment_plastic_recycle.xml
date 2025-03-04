@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="유리병류"
+            android:text="플라스틱 용기류"
             android:textColor="@color/white"
             android:textSize="25sp"
             android:gravity="center"
@@ -71,7 +71,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="음류수병·기타병류"
+                        android:text="페트병"
                         android:textSize="24sp"
                         style="@style/TextTitle"/>
 
@@ -86,14 +86,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_paper_news"/>
+                            android:src="@drawable/img_pet_bottles"/>
                     </androidx.cardview.widget.CardView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="내용물을 비우고 물로 헹구는 등 이물질을 제거하여 배출합니다.\n 담배꽁초 등 이물질을 넣지 않고 배출합니다.\n\n
-                        유리병이 꺠지지 않도록 주의하여 배출합니다.\n소주, 맥주 등 빈용기보증금 대상 유리병은 소매점 등으로 반납하여 보증금을 환급합니다."
+                        android:text="내용물을 비우고 물로 헹구는 등 \n이물질을 제거하여 배출합니다.\n\n부착상표, 부속품 등 \n본체와 다른 재질은 제거한 후 배출합니다.\n\n운반 중 부피를 줄이고 오염방지를 위해\n찌그러트리고 뚜껑을 닫아 배출합니다."
                         android:textAlignment="center"
                         style="@style/TextBody"/>
                 </LinearLayout>
@@ -118,7 +117,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="상자류"
+                        android:text="플라스틱 용기류"
                         android:textSize="24sp"
                         style="@style/TextTitle"/>
 
@@ -133,64 +132,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_paper_box"/>
+                            android:src="@drawable/img_plastics"/>
                     </androidx.cardview.widget.CardView>
 
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="비닐코팅 부분, 상자에 붙어있는 테이프 철핀,\n알루미늄박 등을 제거하고 접어서 배출합니다.\n\n야외 별도 보관 장소 마련 등 다른 종이류와\n섞이지 않게 배출합니다."
+                        android:text="내용물을 비우고 물로 헹구는 등 \n이물질을 제거하여 배출합니다.\n\n부착상표, 부속품 등 \n본체와 다른 재질은 제거한 후 배출합니다."
                         android:textAlignment="center"
                         style="@style/TextBody"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 종이컵·우유팩 카드 -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="종이컵·우유팩"
-                        android:textSize="24sp"
-                        style="@style/TextTitle"/>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="220dp"
-                        android:layout_height="140dp"
-                        android:layout_margin="6dp"
-                        app:cardCornerRadius="20dp"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/img_paper_cup"/>
-                    </androidx.cardview.widget.CardView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="내용물을 비우고 물로 한번 헹군 후 \n압착하여 봉투에 넣거나 한데 묶어 배출합니다."
-                        android:textAlignment="center"
-                        style="@style/TextBody"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
             <!-- 주의사항 카드 -->
             <androidx.cardview.widget.CardView
@@ -231,63 +185,19 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="24dp"
+                        android:padding="8dp"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="아래는 종량제 봉투로 배출하세요!"
+                            android:text="유색 페트병은 기존 플라스틱류에 배출합니다.\n\n요구르트병, 샴푸통, 세제통 등 다른 재질인 뚜껑이나 펌프는 분리해서 배출합니다.\n플라스틱 이외의 재질이 부착된 유모차, 완구 등은 대형폐기물 품목으로 배출합니다."
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="24dp"
                             android:textAlignment="center"
                             style="@style/TextBody"/>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="110dp"
-                                    android:layout_height="110dp"
-                                    android:src="@drawable/img_paper_oily"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="기름 오염"
-                                    style="@style/TextCaption"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center">
-
-                                <ImageView
-                                    android:layout_width="110dp"
-                                    android:layout_height="110dp"
-                                    android:src="@drawable/img_paper_food"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:text="음식물 오염"
-                                    style="@style/TextCaption"/>
-
-                            </LinearLayout>
-                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -296,6 +206,5 @@
                 android:layout_height="60dp"/>
         </LinearLayout>
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

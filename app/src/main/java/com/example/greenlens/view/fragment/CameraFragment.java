@@ -1,7 +1,6 @@
 package com.example.greenlens.view.fragment;
 
 import android.content.pm.PackageManager;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,20 +11,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
-import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.greenlens.R;
-import com.example.greenlens.view.custom.ObjectDetectionOverlay;
+import com.example.greenlens.view.MainActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -40,8 +37,7 @@ public class CameraFragment extends Fragment {
 
     private PreviewView viewFinder;
     private ImageCapture imageCapture;
-    private CardView cardResult;
-    private ObjectDetectionOverlay objectOverlay;
+    private FloatingActionButton captureButton;
 
     @Nullable
     @Override
@@ -54,8 +50,12 @@ public class CameraFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewFinder = view.findViewById(R.id.viewFinder);
-        cardResult = view.findViewById(R.id.cardResult);
-        objectOverlay = view.findViewById(R.id.objectOverlay);
+        captureButton = view.findViewById(R.id.btnCapture);
+
+        // MainActivity의 하단 내비바 숨기기
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).hideBottomNavigation();
+        }
 
         if (allPermissionsGranted()) {
             startCamera();
@@ -63,7 +63,26 @@ public class CameraFragment extends Fragment {
             ActivityCompat.requestPermissions(requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
 
-        view.findViewById(R.id.btnBack).setOnClickListener(v -> requireActivity().onBackPressed());
+        // 뒤로가기 버튼
+        view.findViewById(R.id.btnBack).setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
+
+        // 촬영 버튼
+        captureButton.setOnClickListener(v -> {
+            // 버튼 비활성화 (중복 클릭 방지)
+            captureButton.setEnabled(false);
+            takePhoto();
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // MainActivity의 하단 내비바 다시 보이기
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).showBottomNavigation();
+        }
     }
 
     private void startCamera() {
@@ -81,19 +100,14 @@ public class CameraFragment extends Fragment {
                         .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                         .build();
 
-                ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build();
-
                 CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
 
                 cameraProvider.unbindAll();
                 cameraProvider.bindToLifecycle(
-                        getViewLifecycleOwner(),  // Fragment의 Lifecycle 사용
+                        getViewLifecycleOwner(),
                         cameraSelector,
                         preview,
-                        imageCapture,
-                        imageAnalysis
+                        imageCapture
                 );
 
             } catch (ExecutionException | InterruptedException e) {
@@ -102,22 +116,12 @@ public class CameraFragment extends Fragment {
         }, ContextCompat.getMainExecutor(requireContext()));
     }
 
-    private void detectObjects(ImageProxy image) {
-        float width = objectOverlay.getWidth();
-        float height = objectOverlay.getHeight();
-        RectF detectedRect = new RectF(
-                width * 0.2f,
-                height * 0.2f,
-                width * 0.8f,
-                height * 0.8f
-        );
-
-        requireActivity().runOnUiThread(() -> objectOverlay.setObjectRect(detectedRect));
-    }
-
     private void takePhoto() {
         ImageCapture imageCapture = this.imageCapture;
-        if (imageCapture == null) return;
+        if (imageCapture == null) {
+            captureButton.setEnabled(true);
+            return;
+        }
 
         File photoFile = new File(
                 getOutputDirectory(),
@@ -135,14 +139,30 @@ public class CameraFragment extends Fragment {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults output) {
                         analyzeImage(photoFile);
+                        // 버튼 다시 활성화
+                        captureButton.setEnabled(true);
                     }
 
                     @Override
                     public void onError(@NonNull ImageCaptureException exception) {
                         Log.e(TAG, "Photo capture failed: " + exception.getMessage());
+                        Toast.makeText(requireContext(),
+                                "사진 촬영에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        // 버튼 다시 활성화
+                        captureButton.setEnabled(true);
                     }
                 }
         );
+    }
+
+    private void analyzeImage(File imageFile) {
+        // TODO: 이미지 분석 로직 구현
+        // 임시로 플라스틱으로 분류
+        String resultType = "plastic";
+
+        // 결과 BottomSheet 표시
+        ResultBottomSheetDialog bottomSheet = ResultBottomSheetDialog.newInstance(resultType);
+        bottomSheet.show(getChildFragmentManager(), "result");
     }
 
     private File getOutputDirectory() {
@@ -171,16 +191,10 @@ public class CameraFragment extends Fragment {
             if (allPermissionsGranted()) {
                 startCamera();
             } else {
-                Toast.makeText(requireContext(), "카메라 권한이 필요합니다.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(),
+                        "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
                 requireActivity().finish();
             }
         }
-    }
-
-    private void analyzeImage(File imageFile) {
-        requireActivity().runOnUiThread(() -> {
-            cardResult.setVisibility(View.VISIBLE);
-        });
     }
 }

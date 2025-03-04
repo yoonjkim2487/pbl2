@@ -164,7 +164,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="종이컵·우유팩"
+                        android:text="종이컵, 우유팩"
                         android:textSize="24sp"
                         style="@style/TextTitle"/>
 
@@ -226,19 +226,39 @@
                             android:src="@drawable/ic_warning"/>
                     </LinearLayout>
 
-                    <!-- 주의사항 내용 -->
-                    <LinearLayout
+                <!-- 주의사항 내용 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="24dp"
-                        android:orientation="vertical">
+                        android:text="아래는 종량제 봉투로 배출하세요!"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="24dp"
+                        style="@style/TextBody"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_number1"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="아래는 종량제 봉투로 배출하세요!"
-                            android:textAlignment="center"
-                            style="@style/TextBody"/>
+                            android:layout_marginStart="8dp"
+                            android:text="오염된 종이"
+                            style="@style/TextWarningTitle"/>
+                    </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
