@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
 
         // 캔류 카드 클릭
         binding.cardCan.setOnClickListener(v -> {
-            ((MainActivity) requireActivity()).showRecycleGuide("can");
+            ((MainActivity) requireActivity()).showRecycleGuide("metal");
         });
 
         // 비닐류 카드 클릭
