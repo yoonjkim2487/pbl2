@@ -1,5 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
+    // Kotlin serialization plugin for type safe routes and navigation arguments
+    kotlin("plugin.serialization") version "2.0.21"
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -19,12 +22,11 @@ android {
         }
     }
 
+
     namespace = "com.example.greenlens"
     compileSdk = 34
 
-    buildFeatures {
-        viewBinding = true
-    }
+
 
     defaultConfig {
         applicationId = "com.example.greenlens"
@@ -49,6 +51,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
+
 }
 
 dependencies {
@@ -88,4 +97,23 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // navigation
+    val nav_version = "2.8.8"
+
+    // Jetpack Compose integration
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // Views/Fragments integration
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
+
+    // Feature module support for Fragments
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+
+    // Testing Navigation
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    // JSON serialization library, works with the Kotlin serialization plugin
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
