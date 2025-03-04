@@ -104,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
         if (binding.mainBottomNav != null) {
             binding.mainBottomNav.setVisibility(View.GONE);
             binding.mainFloatingAddBtn.setVisibility(View.GONE);
-            // 하단 네비게이션 배경도 함께 숨기기
-            binding.mainBottomNav.setBackground(null);
         }
     }
 
