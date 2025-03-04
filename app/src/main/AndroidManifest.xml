@@ -50,6 +50,10 @@
             android:name=".view.PointHistoryActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".view.CameraActivity"
+            android:exported="false" />
+
 
 
 

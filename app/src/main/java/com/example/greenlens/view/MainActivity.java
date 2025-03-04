@@ -1,25 +1,16 @@
 package com.example.greenlens.view;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.greenlens.R;
 import com.example.greenlens.databinding.ActivityMainBinding;
-import com.example.greenlens.view.fragment.CameraFragment;
-import com.example.greenlens.view.fragment.HomeFragment;
-import com.example.greenlens.view.fragment.MapFragment;
-import com.example.greenlens.view.fragment.ProfileFragment;
-import com.example.greenlens.view.fragment.RecycleGuideFragment;
-import com.example.greenlens.view.fragment.ShopFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -41,12 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
         // FloatingActionButton 클릭 시 cameraFragment로 이동
         binding.fab.setOnClickListener(v -> {
-            navController.navigate(R.id.cameraFragment);
+            Intent intent = new Intent(this, CameraActivity.class);
+            startActivity(intent);
         });
 
 
     }
-
+    
 //    private void initView() {
 //        // 바텀 네비게이션 배경 제거
 //        binding.mainBottomNav.setBackground(null);
