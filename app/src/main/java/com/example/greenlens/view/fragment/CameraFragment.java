@@ -68,7 +68,7 @@ public class CameraFragment extends Fragment {
 
         // MainActivity의 하단 내비바 숨기기
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).hideBottomNavigation();
+//            ((MainActivity) getActivity()).hideBottomNavigation();
         }
 
         if (allPermissionsGranted()) {
@@ -95,7 +95,7 @@ public class CameraFragment extends Fragment {
         super.onDestroyView();
         // MainActivity의 하단 내비바 다시 보이기
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).showBottomNavigation();
+//            ((MainActivity) getActivity()).showBottomNavigation();
         }
     }
 

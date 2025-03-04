@@ -101,7 +101,7 @@ public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
 
     private void navigateToRecycleGuide(String type) {
         if (getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).showRecycleGuide(type);
+//            ((MainActivity) getActivity()).showRecycleGuide(type);
         }
         dismiss();
     }
