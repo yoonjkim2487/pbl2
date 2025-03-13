@@ -23,7 +23,7 @@
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
 
-    <!-- 카메라 화면 -->
+     <!-- 카메라 화면 -->
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.greenlens.view.fragment.CameraFragment"
