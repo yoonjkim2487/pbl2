@@ -4,5 +4,5 @@ package com.example.greenlens.model;
 public interface ApiService {
     // API 엔드포인트 정의
     // @GET("points")
-    // Call<Point> getUserPoint();
+    // Call<Point> g
 }
