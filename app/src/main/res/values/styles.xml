@@ -1,0 +1,60 @@
+<resources>
+    <!-- 텍스트 스타일 -->
+    <style name="TextTitle">
+        <item name="android:fontFamily">@font/jalnan</item>
+        <item name="fontFamily">@font/jalnan</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextSubtitle">
+        <item name="android:fontFamily">@font/jalnan</item>
+        <item name="fontFamily">@font/jalnan</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+    <style name="TextBody">
+        <item name="android:fontFamily">@font/jeongi_anjunche</item>
+        <item name="fontFamily">@font/jeongi_anjunche</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextHeader">
+        <item name="android:fontFamily">@font/jeongi_anjunche</item>
+        <item name="fontFamily">@font/jeongi_anjunche</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextSmall">
+        <item name="android:fontFamily">@font/jeongi_anjunche</item>
+        <item name="fontFamily">@font/jeongi_anjunche</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="TextCaption">
+        <item name="android:fontFamily">@font/jeongi_anjunche</item>
+        <item name="fontFamily">@font/jeongi_anjunche</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="TextWarningTitle">
+        <item name="android:fontFamily">@font/jalnan</item>
+        <item name="fontFamily">@font/jalnan</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextInputLayoutHint" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:fontFamily">@font/jeongi_anjunche</item>
+        <item name="fontFamily">@font/jeongi_anjunche</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+</resources>
