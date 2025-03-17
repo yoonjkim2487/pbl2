@@ -74,17 +74,16 @@ dependencies {
     implementation(libs.firebase.crashlytics.buildtools)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("androidx.recyclerview:recyclerview:1.3.2")
-    implementation ("com.google.android.material:material:1.5.0")
+    // Material Design 라이브러리
+    implementation("com.google.android.material:material:1.11.0")
 
     // 안드로이드 기본 의존성
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
 
     // 뷰모델과 라이브데이터
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata:2.6.1")
 
-    implementation("com.google.android.material:material:1.11.0")
     // 카메라X
     implementation("androidx.camera:camera-camera2:1.2.2")
     implementation("androidx.camera:camera-lifecycle:1.2.2")

@@ -13,47 +13,77 @@ import com.example.greenlens.R;
 import com.example.greenlens.model.Coupon;
 import com.bumptech.glide.Glide;
 
-public class ShopCouponAdapter extends CouponAdapter {
-    @Override
-    protected int getItemLayout() {
-        return R.layout.item_shop_coupon;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShopCouponAdapter extends RecyclerView.Adapter<ShopCouponAdapter.ViewHolder> {
+    private List<Coupon> items = new ArrayList<>();
+    private OnCouponClickListener listener;
+
+    public interface OnCouponClickListener {
+        void onCouponClick(Coupon coupon, int position);
+    }
+
+    public void setOnCouponClickListener(OnCouponClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void setItems(List<Coupon> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        android.view.View view = LayoutInflater.from(parent.getContext())
-                .inflate(getItemLayout(), parent, false);
-        return new ShopViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_shop_product, parent, false);
+        return new ViewHolder(view);
     }
 
-    private class ShopViewHolder extends ViewHolder {
-        private ImageView imageCoupon;
-        private TextView textName;
-        private TextView textPoints;
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Coupon item = items.get(position);
+        holder.bind(item);
+    }
 
-        public ShopViewHolder(@NonNull android.view.View view) {
-            super(view);
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageProduct;
+        private final TextView textBrand;
+        private final TextView textName;
+        private final TextView textPoint;
+
+        ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageProduct = itemView.findViewById(R.id.image_product);
+            textBrand = itemView.findViewById(R.id.text_brand);
+            textName = itemView.findViewById(R.id.text_name);
+            textPoint = itemView.findViewById(R.id.text_point);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onCouponClick(items.get(position), position);
+                }
+            });
         }
 
-        @Override
-        protected void setupViews(@NonNull android.view.View view) {
-            imageCoupon = view.findViewById(R.id.image_coupon);
-            textName = view.findViewById(R.id.text_name);
-            textPoints = view.findViewById(R.id.text_points);
-        }
+        void bind(Coupon item) {
+            textBrand.setText(String.format("[%s]", item.getBrandName()));
+            textName.setText(item.getProductName());
+            textPoint.setText(String.format("%,dP", item.getPoints()));
 
-        @Override
-        protected void bind(Coupon item) {
-            String displayName = String.format("[%s] %s", item.getBrandName(), item.getProductName());
-            textName.setText(displayName);
-            textPoints.setText(item.getPoints() + "P");
-
+            // 이미지 로드
             if (item.getImageResId() != 0) {
                 Glide.with(itemView.getContext())
                         .load(item.getImageResId())
                         .centerCrop()
-                        .into(imageCoupon);
+                        .into(imageProduct);
             }
         }
     }
