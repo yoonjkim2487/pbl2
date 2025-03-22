@@ -55,44 +55,59 @@
             android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent">
 
+            <!-- 탭 버튼 영역 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tab_unused"
+                <!-- 미사용 쿠폰 탭 -->
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="미사용 쿠폰"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/jalnan"/>
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/tab_used"
+                    <TextView
+                        android:id="@+id/tab_unused"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="미사용 쿠폰"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/jalnan"/>
+                </FrameLayout>
+
+                <!-- 사용내역 탭 -->
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="사용내역"
-                    android:textColor="@color/gray"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/jalnan"/>
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tab_used"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="사용내역"
+                        android:textColor="@color/gray"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/jalnan"/>
+                </FrameLayout>
             </LinearLayout>
 
+            <!-- 탭 인디케이터 -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="2dp">
 
                 <View
                     android:id="@+id/tab_indicator"
-                    android:layout_width="120dp"
+                    android:layout_width="0dp"
                     android:layout_height="2dp"
-                    android:background="@color/black"
-                    android:layout_marginStart="42dp"/>
+                    android:background="@color/black"/>
             </FrameLayout>
         </LinearLayout>
 
@@ -105,6 +120,5 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
