@@ -1,29 +1,105 @@
 package com.example.greenlens.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.example.greenlens.api.ApiClient;
+import com.example.greenlens.api.ApiService;
 import com.example.greenlens.model.User;
+import com.google.gson.Gson;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserRepository {
+    private static final String PREF_NAME = "UserPrefs";
+    private static final String KEY_USER = "user";
     private static UserRepository instance;
+    private final SharedPreferences preferences;
+    private final Gson gson;
+    private final ApiService apiService;
     private User currentUser;
 
-    private UserRepository() {
-        // TODO: 실제 로그인된 사용자 정보를 서버에서 가져오도록 수정
-        currentUser = new User("사용자 닉네임", "user@example.com", 5000);
+    private UserRepository(Context context) {
+        preferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        gson = new Gson();
+        apiService = ApiClient.getInstance().getApiService();
+        loadUser();
     }
 
-    public static UserRepository getInstance() {
+    public static synchronized UserRepository getInstance(Context context) {
         if (instance == null) {
-            instance = new UserRepository();
+            instance = new UserRepository(context.getApplicationContext());
         }
         return instance;
+    }
+
+    public void saveUser(User user) {
+        currentUser = user;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(KEY_USER, gson.toJson(user));
+        editor.apply();
+    }
+
+    private void loadUser() {
+        String userJson = preferences.getString(KEY_USER, null);
+        if (userJson != null) {
+            currentUser = gson.fromJson(userJson, User.class);
+        }
     }
 
     public User getCurrentUser() {
         return currentUser;
     }
 
-    public void updateUserInfo(User user) {
-        // TODO: 서버에 사용자 정보 업데이트 요청
-        this.currentUser = user;
+    public void fetchUserProfile(String token, UserProfileCallback callback) {
+        apiService.getUserProfile("Bearer " + token).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+                    saveUser(user);
+                    callback.onSuccess(user);
+                } else {
+                    callback.onError("사용자 정보를 가져오는데 실패했습니다.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                callback.onError("네트워크 오류가 발생했습니다.");
+            }
+        });
+    }
+
+    public void updateUserProfile(String token, User user, UserProfileCallback callback) {
+        apiService.updateUserProfile("Bearer " + token, user).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User updatedUser = response.body();
+                    saveUser(updatedUser);
+                    callback.onSuccess(updatedUser);
+                } else {
+                    callback.onError("사용자 정보 수정에 실패했습니다.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                callback.onError("네트워크 오류가 발생했습니다.");
+            }
+        });
+    }
+
+    public void clearUser() {
+        currentUser = null;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(KEY_USER);
+        editor.apply();
+    }
+
+    public interface UserProfileCallback {
+        void onSuccess(User user);
+        void onError(String message);
     }
 }

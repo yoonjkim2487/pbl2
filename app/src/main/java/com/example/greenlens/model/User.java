@@ -1,22 +1,36 @@
 package com.example.greenlens.model;
 
 public class User {
-    private String nickname;
+    private Long userId;
+    private String username;
     private String email;
     private int points;
+    private int recycleCount;
+    private String createdAt;
 
-    public User(String nickname, String email, int points) {
-        this.nickname = nickname;
+    public User(Long userId, String username, String email, int points, int recycleCount, String createdAt) {
+        this.userId = userId;
+        this.username = username;
         this.email = email;
         this.points = points;
+        this.recycleCount = recycleCount;
+        this.createdAt = createdAt;
     }
 
-    public String getNickname() {
-        return nickname;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -33,5 +47,21 @@ public class User {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public int getRecycleCount() {
+        return recycleCount;
+    }
+
+    public void setRecycleCount(int recycleCount) {
+        this.recycleCount = recycleCount;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -1,11 +1,22 @@
 package com.example.greenlens.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.greenlens.api.ApiClient;
+import com.example.greenlens.api.ApiService;
 import com.example.greenlens.databinding.ActivitySignUpBinding;
+import com.example.greenlens.model.request.SignupRequest;
+import com.example.greenlens.model.response.SignupResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
@@ -49,12 +60,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // 회원가입 버튼
         binding.btnSignUp.setOnClickListener(v -> {
             if (validateInputs() && checkRequiredAgreements()) {
                 performSignUp();
             }
         });
+        binding.btnBack.setOnClickListener(v -> finish());
 
         // 약관 상세보기 버튼들
         binding.tvTermsDetail.setOnClickListener(v -> showTermsDialog("서비스 이용약관"));
@@ -63,10 +74,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private boolean validateInputs() {
-        String email = binding.etEmail.getText().toString();
-        String password = binding.etPassword.getText().toString();
-        String passwordConfirm = binding.etPasswordConfirm.getText().toString();
-        String nickname = binding.etNickname.getText().toString();
+        String email = binding.etEmail.getText().toString().trim();
+        String password = binding.etPassword.getText().toString().trim();
+        String passwordConfirm = binding.etPasswordConfirm.getText().toString().trim();
+        String nickname = binding.etNickname.getText().toString().trim();
 
         // 이메일 검증
         if (!isValidEmail(email)) {
@@ -104,10 +115,47 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void performSignUp() {
-        // TODO: 실제 회원가입 로직 구현
-        // 임시 회원가입 성공 처리
-        Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show();
-        finish(); // 로그인 화면으로 돌아가기
+        showLoading(true);
+        String email = binding.etEmail.getText().toString().trim();
+        String password = binding.etPassword.getText().toString().trim();
+        String username = binding.etNickname.getText().toString().trim();
+
+        ApiService apiService = ApiClient.getInstance().getApiService();
+        SignupRequest signupRequest = new SignupRequest(username, email, password);
+
+        try {
+            apiService.signup(signupRequest).enqueue(new Callback<SignupResponse>() {
+                @Override
+                public void onResponse(Call<SignupResponse> call, Response<SignupResponse> response) {
+                    showLoading(false);
+                    if (response.isSuccessful() && response.body() != null) {
+                        Toast.makeText(SignUpActivity.this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        startLoginActivity();
+                    } else {
+                        String errorMessage = "회원가입에 실패했습니다.";
+                        if (response.code() == 409) {
+                            errorMessage = "이미 가입된 이메일입니다.";
+                        } else if (response.code() == 400) {
+                            errorMessage = "잘못된 요청입니다.";
+                        }
+                        Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SignupResponse> call, Throwable t) {
+                    showLoading(false);
+                    String errorMessage = "네트워크 오류가 발생했습니다: " + t.getMessage();
+                    Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    t.printStackTrace(); // 로그캣에 에러 출력
+                }
+            });
+        } catch (Exception e) {
+            showLoading(false);
+            String errorMessage = "예기치 않은 오류가 발생했습니다: " + e.getMessage();
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+            e.printStackTrace(); // 로그캣에 에러 출력
+        }
     }
 
     private boolean isValidEmail(String email) {
@@ -123,6 +171,17 @@ public class SignUpActivity extends AppCompatActivity {
                 .setMessage(content)
                 .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
                 .show();
+    }
+
+    private void showLoading(boolean show) {
+        binding.progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        binding.btnSignUp.setEnabled(!show);
+    }
+
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override

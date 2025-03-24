@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import com.example.greenlens.repository.UserRepository;
 import com.example.greenlens.view.PointHistoryActivity;
 import com.example.greenlens.view.CouponHistoryActivity;
 import com.example.greenlens.view.SettingActivity;
+import com.example.greenlens.manager.UserManager;
 
 public class ProfileFragment extends Fragment {
     private TextView tvNickname;
@@ -27,6 +29,14 @@ public class ProfileFragment extends Fragment {
     private View btnSettings;
     private View layoutPoint;
     private UserRepository userRepository;
+    private UserManager userManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userRepository = UserRepository.getInstance(requireContext());
+        userManager = UserManager.getInstance(requireContext());
+    }
 
     @Nullable
     @Override
@@ -37,7 +47,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        userRepository = UserRepository.getInstance();
         initViews(view);
         setupClickListeners();
         loadUserInfo();
@@ -81,9 +90,42 @@ public class ProfileFragment extends Fragment {
 
     private void loadUserInfo() {
         User currentUser = userRepository.getCurrentUser();
-        tvNickname.setText(currentUser.getNickname());
-        tvEmail.setText(currentUser.getEmail());
-        tvPoint.setText(String.format("%,dP", currentUser.getPoints()));
+        if (currentUser == null) {
+            // 저장된 토큰으로 사용자 정보 가져오기 시도
+            String token = userManager.getToken();
+            if (token != null && !token.isEmpty()) {
+                userRepository.fetchUserProfile(token, new UserRepository.UserProfileCallback() {
+                    @Override
+                    public void onSuccess(User user) {
+                        if (isAdded() && getActivity() != null) {
+                            updateUI(user);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        if (isAdded() && getActivity() != null) {
+                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } else {
+                // 토큰이 없는 경우 기본값 표시
+                tvNickname.setText("로그인이 필요합니다");
+                tvEmail.setText("");
+                tvPoint.setText("0P");
+            }
+        } else {
+            updateUI(currentUser);
+        }
+    }
+
+    private void updateUI(User user) {
+        if (user != null) {
+            tvNickname.setText(user.getUsername());
+            tvEmail.setText(user.getEmail());
+            tvPoint.setText(String.format("%,dP", user.getPoints()));
+        }
     }
 
     @Override
