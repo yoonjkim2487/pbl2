@@ -15,6 +15,8 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
+import java.util.Map;
+
 public interface ApiService {
     @POST("users/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
@@ -25,11 +27,11 @@ public interface ApiService {
     @GET("users/profile")
     Call<User> getUserProfile(@Header("Authorization") String token);
 
-    @PUT("users/profile")
-    Call<User> updateUserProfile(@Header("Authorization") String token, @Body User user);
+    @PUT("users/{userId}")
+    Call<User> updateUserProfile(@Header("Authorization") String token, @Path("userId") Long userId, @Body User user);
 
     @DELETE("users/{userId}")
-    Call<Void> deleteAccount(@Header("Authorization") String token, @Path("userId") int userId);
+    Call<Void> deleteAccount(@Header("Authorization") String token, @Path("userId") Long userId);
 
     @POST("users/logout")
     Call<Void> logout(@Header("Authorization") String token);

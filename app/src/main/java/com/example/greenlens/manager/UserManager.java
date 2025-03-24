@@ -46,11 +46,13 @@ public class UserManager {
             @Override
             public void onSuccess(User user) {
                 // 프로필 정보 저장 완료
+                userRepository.saveUser(user);
             }
 
             @Override
             public void onError(String message) {
                 // 에러 처리
+                clearUserSession();
             }
         });
     }
@@ -84,6 +86,10 @@ public class UserManager {
         String token = getToken();
         if (token != null) {
             userRepository.updateUserProfile(token, user, callback);
+        } else {
+            if (callback != null) {
+                callback.onError("로그인이 필요합니다.");
+            }
         }
     }
 
@@ -127,4 +133,4 @@ public class UserManager {
     public ApiService getApiService() {
         return apiService;
     }
-}
+} 

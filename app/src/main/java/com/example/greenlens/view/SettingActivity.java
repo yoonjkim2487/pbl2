@@ -12,6 +12,10 @@ import com.example.greenlens.databinding.ActivitySettingBinding;
 import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.User;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SettingActivity extends AppCompatActivity {
     private ActivitySettingBinding binding;
     private UserManager userManager;
@@ -82,20 +86,19 @@ public class SettingActivity extends AppCompatActivity {
         showLoading(true);
         String token = "Bearer " + userManager.getToken();
 
-        // 먼저 사용자 프로필 정보를 가져옵니다
+        // 먼저 프로필 정보를 가져와서 userId를 얻습니다
         userManager.getApiService().getUserProfile(token).enqueue(new retrofit2.Callback<User>() {
             @Override
             public void onResponse(retrofit2.Call<User> call, retrofit2.Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    User currentUser = response.body();
-                    if (currentUser.getUserId() == null) {
+                    User user = response.body();
+                    if (user.getUserId() != null) {
+                        // userId를 얻었으면 삭제 진행
+                        performDeleteAccount(token, user.getUserId());
+                    } else {
                         showLoading(false);
                         Toast.makeText(SettingActivity.this, "사용자 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        return;
                     }
-
-                    // 사용자 정보를 가져온 후 계정 삭제 진행
-                    performDeleteAccount(token, currentUser.getUserId().intValue());
                 } else {
                     showLoading(false);
                     Toast.makeText(SettingActivity.this, "사용자 정보를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
@@ -110,14 +113,15 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
 
-    private void performDeleteAccount(String token, int userId) {
+    private void performDeleteAccount(String token, Long userId) {
         userManager.getApiService().deleteAccount(token, userId).enqueue(new retrofit2.Callback<Void>() {
             @Override
             public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
                 showLoading(false);
                 if (response.isSuccessful()) {
-                    userManager.clearUserSession();
                     Toast.makeText(SettingActivity.this, "계정이 성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    // 로그아웃 처리
+                    userManager.clearUserSession();
                     // 로그인 화면으로 이동
                     Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

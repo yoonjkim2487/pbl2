@@ -10,6 +10,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserRepository {
     private static final String PREF_NAME = "UserPrefs";
     private static final String KEY_USER = "user";
@@ -72,7 +75,12 @@ public class UserRepository {
     }
 
     public void updateUserProfile(String token, User user, UserProfileCallback callback) {
-        apiService.updateUserProfile("Bearer " + token, user).enqueue(new Callback<User>() {
+        if (user == null || user.getUserId() == null) {
+            callback.onError("사용자 정보가 올바르지 않습니다.");
+            return;
+        }
+
+        apiService.updateUserProfile("Bearer " + token, user.getUserId(), user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {

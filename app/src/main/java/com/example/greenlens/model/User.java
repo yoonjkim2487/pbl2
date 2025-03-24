@@ -1,28 +1,35 @@
 package com.example.greenlens.model;
 
+import java.util.List;
+
 public class User {
-    private Long userId;
-    private String username;
+    private Long id;  // API 응답의 id 필드와 매칭
     private String email;
+    private String username;
+    private String password;
+    private boolean enabled;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+    private List<String> authorities;
     private int points;
     private int recycleCount;
-    private String createdAt;
 
-    public User(Long userId, String username, String email, int points, int recycleCount, String createdAt) {
-        this.userId = userId;
-        this.username = username;
-        this.email = email;
-        this.points = points;
-        this.recycleCount = recycleCount;
-        this.createdAt = createdAt;
-    }
-
+    // Getter and Setter
     public Long getUserId() {
-        return userId;
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -33,12 +40,52 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    public List<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = authorities;
     }
 
     public int getPoints() {
@@ -55,13 +102,5 @@ public class User {
 
     public void setRecycleCount(int recycleCount) {
         this.recycleCount = recycleCount;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
     }
 }

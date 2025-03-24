@@ -89,43 +89,32 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadUserInfo() {
-        User currentUser = userRepository.getCurrentUser();
-        if (currentUser == null) {
-            // 저장된 토큰으로 사용자 정보 가져오기 시도
-            String token = userManager.getToken();
-            if (token != null && !token.isEmpty()) {
-                userRepository.fetchUserProfile(token, new UserRepository.UserProfileCallback() {
-                    @Override
-                    public void onSuccess(User user) {
-                        if (isAdded() && getActivity() != null) {
-                            updateUI(user);
-                        }
-                    }
+        String token = userManager.getToken();
 
-                    @Override
-                    public void onError(String message) {
-                        if (isAdded() && getActivity() != null) {
-                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            } else {
-                // 토큰이 없는 경우 기본값 표시
-                tvNickname.setText("로그인이 필요합니다");
-                tvEmail.setText("");
-                tvPoint.setText("0P");
+        if (token == null) {
+            Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            tvNickname.setText("로그인이 필요합니다");
+            tvEmail.setText("");
+            tvPoint.setText("0P");
+            return;
+        }
+
+        userRepository.fetchUserProfile(token, new UserRepository.UserProfileCallback() {
+            @Override
+            public void onSuccess(User user) {
+                if (getActivity() == null || !isAdded()) return;
+
+                tvNickname.setText(user.getUsername());
+                tvEmail.setText(user.getEmail());
+                tvPoint.setText(String.format("%d P", user.getPoints()));
             }
-        } else {
-            updateUI(currentUser);
-        }
-    }
 
-    private void updateUI(User user) {
-        if (user != null) {
-            tvNickname.setText(user.getUsername());
-            tvEmail.setText(user.getEmail());
-            tvPoint.setText(String.format("%,dP", user.getPoints()));
-        }
+            @Override
+            public void onError(String message) {
+                if (getActivity() == null || !isAdded()) return;
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

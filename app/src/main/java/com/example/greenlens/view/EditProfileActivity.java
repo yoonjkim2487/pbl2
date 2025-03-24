@@ -1,5 +1,6 @@
 package com.example.greenlens.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -15,6 +16,9 @@ import com.example.greenlens.model.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
     private ActivityEditProfileBinding binding;
@@ -77,18 +81,49 @@ public class EditProfileActivity extends AppCompatActivity {
         showLoading(true);
         String token = "Bearer " + userManager.getToken();
 
-        // 현재 사용자 정보 업데이트
-        currentUser.setUsername(binding.etNickname.getText().toString());
-        currentUser.setEmail(binding.etEmail.getText().toString());
+        // 먼저 프로필 정보를 가져와서 userId를 얻습니다
+        apiService.getUserProfile(token).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+                    if (user.getUserId() != null) {
+                        // userId를 얻었으면 수정 진행
+                        user.setUsername(binding.etNickname.getText().toString());
+                        user.setEmail(binding.etEmail.getText().toString());
+                        performUpdateProfile(token, user);
+                    } else {
+                        showLoading(false);
+                        Toast.makeText(EditProfileActivity.this, "사용자 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    showLoading(false);
+                    Toast.makeText(EditProfileActivity.this, "사용자 정보를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        apiService.updateUserProfile(token, currentUser).enqueue(new Callback<User>() {
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                showLoading(false);
+                Toast.makeText(EditProfileActivity.this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void performUpdateProfile(String token, User user) {
+        apiService.updateUserProfile(token, user.getUserId(), user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 showLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(EditProfileActivity.this, "프로필이 성공적으로 수정되었습니다.", Toast.LENGTH_SHORT).show();
-                    currentUser = response.body();
-                    updateUI(currentUser);
+                    // 로그아웃 처리
+                    userManager.clearUserSession();
+                    // 로그인 화면으로 이동
+                    Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(EditProfileActivity.this, "프로필 수정에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
