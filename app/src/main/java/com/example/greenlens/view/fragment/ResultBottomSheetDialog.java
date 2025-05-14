@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.greenlens.R;
 import com.example.greenlens.view.MainActivity;
@@ -17,11 +19,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
     private static final String ARG_TYPE = "type";
+    private static final String ARG_DISPOSAL_METHOD = "disposal_method";
 
     public static ResultBottomSheetDialog newInstance(String type) {
+        return newInstance(type, null);
+    }
+
+    public static ResultBottomSheetDialog newInstance(String type, String disposalMethod) {
         ResultBottomSheetDialog fragment = new ResultBottomSheetDialog();
         Bundle args = new Bundle();
         args.putString(ARG_TYPE, type);
+        if (disposalMethod != null) {
+            args.putString(ARG_DISPOSAL_METHOD, disposalMethod);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,17 +54,28 @@ public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         String type = getArguments().getString(ARG_TYPE);
+        String disposalMethod = getArguments().getString(ARG_DISPOSAL_METHOD);
 
         ImageView iconView = view.findViewById(R.id.ivResultIcon);
         TextView titleView = view.findViewById(R.id.tvResultTitle);
         TextView descView = view.findViewById(R.id.tvResultDescription);
+        ImageView arrowIcon = view.findViewById(R.id.ivArrow);
 
         setupResultView(type, iconView, titleView, descView);
 
-        // 전체 뷰 클릭 시 해당 재활용 방법 화면으로 이동
+        // 서버에서 받아온 처리 방법이 있으면 표시
+        if (disposalMethod != null && !disposalMethod.isEmpty()) {
+            descView.setText(disposalMethod);
+        }
+
+        // 화살표 아이콘 클릭 시 해당 재활용 방법 화면으로 이동
+        arrowIcon.setOnClickListener(v -> {
+            navigateToRecycleGuide(type);
+        });
+
+        // 전체 뷰 클릭 시에도 이동할 수 있도록 설정
         view.setOnClickListener(v -> {
             navigateToRecycleGuide(type);
-            dismiss();
         });
     }
 
@@ -81,9 +102,9 @@ public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
                 titleView.setText("유리병류");
                 descView.setText("음료수병, 기타병류\n유리로 된 재활용품");
                 break;
-            case "can":
+            case "metal":
                 iconView.setImageResource(R.drawable.ic_metal_detail);
-                titleView.setText("캔류");
+                titleView.setText("금속캔");
                 descView.setText("알루미늄캔, 철캔\n캔으로 된 재활용품");
                 break;
             case "vinyl":
@@ -101,7 +122,12 @@ public class ResultBottomSheetDialog extends BottomSheetDialogFragment {
 
     private void navigateToRecycleGuide(String type) {
         if (getActivity() instanceof MainActivity) {
-//            ((MainActivity) getActivity()).showRecycleGuide(type);
+            NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
+            HomeFragmentDirections.ActionHomeFragmentToRecycleGuideFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToRecycleGuideFragment(type);
+
+            navController.navigate(action);
         }
         dismiss();
     }

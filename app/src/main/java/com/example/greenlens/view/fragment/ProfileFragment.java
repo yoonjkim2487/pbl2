@@ -106,7 +106,22 @@ public class ProfileFragment extends Fragment {
 
                 tvNickname.setText(user.getUsername());
                 tvEmail.setText(user.getEmail());
-                tvPoint.setText(String.format("%d P", user.getPoints()));
+
+                // 포인트 API를 사용하여 최신 포인트 정보 가져오기
+                userManager.getUserPoints(new UserManager.PointsCallback() {
+                    @Override
+                    public void onSuccess(int points, String lastUpdated) {
+                        if (getActivity() == null || !isAdded()) return;
+                        tvPoint.setText(String.format("%d P", points));
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        if (getActivity() == null || !isAdded()) return;
+                        // API 실패 시 User 모델에 저장된 포인트 사용
+                        tvPoint.setText(String.format("%d P", user.getPoints()));
+                    }
+                });
             }
 
             @Override

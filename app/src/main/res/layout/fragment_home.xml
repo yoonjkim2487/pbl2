@@ -33,13 +33,13 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <!-- 첫 번째 큰 카드 (종이류) -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_paper"
             android:layout_width="match_parent"
             android:layout_height="125dp"
             android:layout_marginBottom="15dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="0dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white">
 
             <LinearLayout
@@ -61,7 +61,7 @@
                     android:text="종이류"
                     style="@style/TextSubtitle"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- 첫 번째 작은 카드들 row -->
         <LinearLayout
@@ -71,14 +71,14 @@
             android:layout_marginBottom="15dp">
 
             <!-- 금속캔 카드 -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_can"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="125dp"
                 android:layout_marginEnd="7.5dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
@@ -100,17 +100,17 @@
                         android:text="금속캔"
                         style="@style/TextSubtitle"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- 유리병류 카드 -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_glass"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="125dp"
                 android:layout_marginStart="7.5dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
@@ -132,17 +132,17 @@
                         android:text="유리병류"
                         style="@style/TextSubtitle"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <!-- 두 번째 큰 카드 (플라스틱) -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_plastic"
             android:layout_width="match_parent"
             android:layout_height="125dp"
             android:layout_marginBottom="15dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="0dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white">
 
             <LinearLayout
@@ -164,7 +164,7 @@
                     android:text="플라스틱 용기류"
                     style="@style/TextSubtitle"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- 두 번째 작은 카드들 row -->
         <LinearLayout
@@ -173,14 +173,14 @@
             android:orientation="horizontal">
 
             <!-- 스티로폼 카드 -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_styrofoam"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="125dp"
                 android:layout_marginEnd="7.5dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
@@ -202,17 +202,17 @@
                         android:text="스티로폼"
                         style="@style/TextSubtitle"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- 비닐류 카드 -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_vinyl"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="125dp"
                 android:layout_marginStart="7.5dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
@@ -234,7 +234,7 @@
                         android:text="비닐류"
                         style="@style/TextSubtitle"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

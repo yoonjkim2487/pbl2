@@ -6,13 +6,14 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.greenlens.api.ApiClient;
 import com.example.greenlens.api.ApiService;
 import com.example.greenlens.databinding.ActivitySignUpBinding;
 import com.example.greenlens.model.request.SignupRequest;
 import com.example.greenlens.model.response.SignupResponse;
+import com.example.greenlens.view.fragment.TermsFragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
         binding.cbAllAgree.setOnCheckedChangeListener((buttonView, isChecked) -> {
             binding.cbTerms.setChecked(isChecked);
             binding.cbPrivacy.setChecked(isChecked);
-            binding.cbMarketing.setChecked(isChecked);
         });
 
         // 개별 체크박스 변경 시 전체 동의 상태 업데이트
@@ -49,13 +49,11 @@ public class SignUpActivity extends AppCompatActivity {
     private void setupCheckBoxListener() {
         binding.cbTerms.setOnCheckedChangeListener((buttonView, isChecked) -> updateAllAgreeState());
         binding.cbPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> updateAllAgreeState());
-        binding.cbMarketing.setOnCheckedChangeListener((buttonView, isChecked) -> updateAllAgreeState());
     }
 
     private void updateAllAgreeState() {
         boolean allChecked = binding.cbTerms.isChecked() &&
-                binding.cbPrivacy.isChecked() &&
-                binding.cbMarketing.isChecked();
+                binding.cbPrivacy.isChecked();
         binding.cbAllAgree.setChecked(allChecked);
     }
 
@@ -68,9 +66,8 @@ public class SignUpActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(v -> finish());
 
         // 약관 상세보기 버튼들
-        binding.tvTermsDetail.setOnClickListener(v -> showTermsDialog("서비스 이용약관"));
-        binding.tvPrivacyDetail.setOnClickListener(v -> showTermsDialog("개인정보 처리방침"));
-        binding.tvMarketingDetail.setOnClickListener(v -> showTermsDialog("마케팅 정보 수신"));
+        binding.tvTermsDetail.setOnClickListener(v -> showTermsDialog("service"));
+        binding.tvPrivacyDetail.setOnClickListener(v -> showTermsDialog("privacy"));
     }
 
     private boolean validateInputs() {
@@ -147,14 +144,14 @@ public class SignUpActivity extends AppCompatActivity {
                     showLoading(false);
                     String errorMessage = "네트워크 오류가 발생했습니다: " + t.getMessage();
                     Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    t.printStackTrace(); // 로그캣에 에러 출력
+                    t.printStackTrace();
                 }
             });
         } catch (Exception e) {
             showLoading(false);
             String errorMessage = "예기치 않은 오류가 발생했습니다: " + e.getMessage();
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-            e.printStackTrace(); // 로그캣에 에러 출력
+            e.printStackTrace();
         }
     }
 
@@ -162,15 +159,12 @@ public class SignUpActivity extends AppCompatActivity {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void showTermsDialog(String title) {
-        // 약관 내용 (실제로는 서버에서 받아오거나 리소스에서 가져와야 함)
-        String content = "약관 내용이 들어갈 자리입니다...";
-
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(content)
-                .setPositiveButton("확인", (dialog, which) -> dialog.dismiss())
-                .show();
+    private void showTermsDialog(String type) {
+        TermsFragment termsFragment = TermsFragment.newInstance(type);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(android.R.id.content, termsFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void showLoading(boolean show) {

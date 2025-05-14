@@ -1,10 +1,15 @@
 package com.example.greenlens.view.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +35,11 @@ public class ShopFragment extends Fragment {
     private ShopCouponAdapter adapter;
     private CouponRepository repository;
     private String currentCategory = "전체";  // 현재 선택된 카테고리
+    private EditText editSearch;
+    private ImageView imgSearch;
+    private List<Coupon> allCoupons = new ArrayList<>();  // 모든 쿠폰 목록
+    private List<Coupon> filteredCoupons = new ArrayList<>();  // 필터링된 쿠폰 목록
+    private String currentSearchQuery = "";  // 현재 검색어
 
     @Nullable
     @Override
@@ -42,24 +52,62 @@ public class ShopFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         repository = new CouponRepository();
+        setupSearchView(view);
         setupCouponList(view);
         initCategories(view);
+        initDummyData();  // 더미 데이터 초기화
     }
 
-    private void initCategories(View view) {
-        // 각 카테고리 View 찾기
-        View categoryCafe = view.findViewById(R.id.category_cafe);
-        View categoryRestaurant = view.findViewById(R.id.category_restaurant);
-        View categoryStore = view.findViewById(R.id.category_store);
-        View categoryMovie = view.findViewById(R.id.category_movie);
-        View categoryEtc = view.findViewById(R.id.category_etc);
+    private void setupSearchView(View view) {
+        editSearch = view.findViewById(R.id.edit_search);
+        imgSearch = view.findViewById(R.id.img_search);
 
-        // 각 카테고리 초기화
-        setupCategory(categoryCafe, R.drawable.ic_cafe, "카페");
-        setupCategory(categoryRestaurant, R.drawable.ic_restaurant, "식당");
-        setupCategory(categoryStore, R.drawable.ic_convenience_store, "편의점");
-        setupCategory(categoryMovie, R.drawable.ic_movie, "영화");
-        setupCategory(categoryEtc, R.drawable.ic_etc, "기타");
+        // 검색 아이콘 클릭 시 검색 수행
+        imgSearch.setOnClickListener(v -> performSearch());
+
+        // 키보드에서 검색 버튼 클릭 시 검색 수행
+        editSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performSearch();
+                return true;
+            }
+            return false;
+        });
+
+        // 텍스트 변경 시 실시간 검색 (선택적으로 활성화)
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                currentSearchQuery = s.toString().trim();
+                filterCoupons();
+            }
+        });
+    }
+
+    private void performSearch() {
+        currentSearchQuery = editSearch.getText().toString().trim();
+        filterCoupons();
+    }
+
+    private void initDummyData() {
+        // 더미 데이터 추가
+        allCoupons.add(new Coupon("CU", "ABC초코쿠키쿠앤크", 1500, "편의점", "2025-12-31", R.drawable.img_cookie));
+        allCoupons.add(new Coupon("스타벅스", "아메리카노", 5000, "카페", "2025-12-31", R.drawable.img_americano));
+        allCoupons.add(new Coupon("투썸플레이스", "아이스박스", 7500, "카페", "2025-12-31", R.drawable.img_icebox));
+        allCoupons.add(new Coupon("CGV", "영화관람권", 9000, "영화", "2025-12-31", R.drawable.img_cgv));
+        allCoupons.add(new Coupon("GS25", "팝콘", 2500, "편의점", "2025-12-31", R.drawable.img_cookie));
+        allCoupons.add(new Coupon("이디야", "카페라떼", 4500, "카페", "2025-12-31", R.drawable.img_americano));
+        allCoupons.add(new Coupon("메가박스", "영화예매권", 9500, "영화", "2025-12-31", R.drawable.img_cgv));
+        allCoupons.add(new Coupon("파스쿠찌", "바닐라라떼", 5500, "카페", "2025-12-31", R.drawable.img_americano));
+
+        // 초기 데이터 로드
+        filterCoupons();
     }
 
     private void setupCouponList(View view) {
@@ -79,36 +127,51 @@ public class ShopFragment extends Fragment {
                     coupon.getProductName() + " 상세 페이지로 이동합니다.",
                     Toast.LENGTH_SHORT).show();
         });
-
-        loadCoupons("전체");  // 초기 로딩
     }
 
-    private void loadCoupons(String category) {
-        currentCategory = category;  // 현재 카테고리 업데이트
-        List<Coupon> allCoupons = new ArrayList<>();
+    private void filterCoupons() {
+        // 카테고리 및 검색어로 필터링
+        filteredCoupons = allCoupons.stream()
+                .filter(coupon ->
+                        (currentCategory.equals("전체") || coupon.getCategory().equals(currentCategory)) &&
+                                (currentSearchQuery.isEmpty() ||
+                                        coupon.getProductName().toLowerCase().contains(currentSearchQuery.toLowerCase()) ||
+                                        coupon.getBrandName().toLowerCase().contains(currentSearchQuery.toLowerCase()))
+                )
+                .collect(Collectors.toList());
 
-        // 더미 데이터 추가
-        allCoupons.add(new Coupon("CU", "ABC초코쿠키쿠앤크", 1500, "편의점", "2025-12-31", R.drawable.img_cookie));
-        allCoupons.add(new Coupon("스타벅스", "아메리카노", 5000, "카페", "2025-12-31", R.drawable.img_americano));
-        allCoupons.add(new Coupon("투썸플레이스", "아이스박스", 7500, "카페", "2025-12-31", R.drawable.img_icebox));
-        allCoupons.add(new Coupon("CGV", "영화관람권", 9000, "영화", "2025-12-31", R.drawable.img_cgv));
-
-        // 카테고리가 "전체"이면 모든 상품을 보여주고, 아니면 해당 카테고리 상품만 필터링
-        List<Coupon> filteredCoupons;
-        if (category.equals("전체")) {
-            filteredCoupons = allCoupons;
-        } else {
-            filteredCoupons = allCoupons.stream()
-                    .filter(coupon -> coupon.getCategory().equals(category))
-                    .collect(Collectors.toList());
+        // 검색 결과가 없을 때 메시지 표시
+        if (filteredCoupons.isEmpty() && !currentSearchQuery.isEmpty()) {
+            Toast.makeText(requireContext(), "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show();
         }
 
+        // 리스트 업데이트
         adapter.setItems(filteredCoupons);
         adapter.notifyDataSetChanged();
 
-        // 카테고리 제목 업데이트
+        // 카테고리 제목 업데이트 (검색어가 있으면 검색 결과 표시)
         TextView titleText = requireView().findViewById(R.id.text_all_title);
-        titleText.setText(category);
+        if (!currentSearchQuery.isEmpty()) {
+            titleText.setText("'" + currentSearchQuery + "' 검색 결과");
+        } else {
+            titleText.setText(currentCategory);
+        }
+    }
+
+    private void initCategories(View view) {
+        // 각 카테고리 View 찾기
+        View categoryCafe = view.findViewById(R.id.category_cafe);
+        View categoryRestaurant = view.findViewById(R.id.category_restaurant);
+        View categoryStore = view.findViewById(R.id.category_store);
+        View categoryMovie = view.findViewById(R.id.category_movie);
+        View categoryEtc = view.findViewById(R.id.category_etc);
+
+        // 각 카테고리 초기화
+        setupCategory(categoryCafe, R.drawable.ic_cafe, "카페");
+        setupCategory(categoryRestaurant, R.drawable.ic_restaurant, "식당");
+        setupCategory(categoryStore, R.drawable.ic_convenience_store, "편의점");
+        setupCategory(categoryMovie, R.drawable.ic_movie, "영화");
+        setupCategory(categoryEtc, R.drawable.ic_etc, "기타");
     }
 
     private void setupCategory(View categoryView, int iconResId, String categoryName) {
@@ -131,8 +194,11 @@ public class ShopFragment extends Fragment {
                         cardView.setCardBackgroundColor(requireContext().getColor(R.color.main_green));
                         textView.setTextColor(requireContext().getColor(R.color.white));
 
-                        // 상품 목록 업데이트
-                        loadCoupons(categoryName);
+                        // 카테고리 변경 및 필터링
+                        currentCategory = categoryName;
+                        editSearch.setText("");  // 검색어 초기화
+                        currentSearchQuery = "";
+                        filterCoupons();
                     });
                 }
             } catch (Exception e) {

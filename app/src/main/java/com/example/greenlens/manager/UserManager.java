@@ -10,6 +10,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Map;
+
 public class UserManager {
     private static final String PREF_NAME = "UserPrefs";
     private static final String KEY_TOKEN = "token";
@@ -91,6 +93,55 @@ public class UserManager {
                 callback.onError("로그인이 필요합니다.");
             }
         }
+    }
+
+    public interface PointsCallback {
+        void onSuccess(int points, String lastUpdated);
+        void onError(String message);
+    }
+
+    public void getUserPoints(PointsCallback callback) {
+        String token = getToken();
+        User currentUser = getCurrentUser();
+
+        if (token == null || currentUser == null) {
+            if (callback != null) {
+                callback.onError("로그인이 필요합니다.");
+            }
+            return;
+        }
+
+        String authToken = "Bearer " + token;
+        apiService.getUserPoints(authToken, currentUser.getId()).enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Map<String, Object> result = response.body();
+                    try {
+                        int points = ((Number) result.get("points")).intValue();
+                        String lastUpdated = (String) result.get("last_updated");
+                        if (callback != null) {
+                            callback.onSuccess(points, lastUpdated);
+                        }
+                    } catch (Exception e) {
+                        if (callback != null) {
+                            callback.onError("포인트 정보를 처리하는 중 오류가 발생했습니다.");
+                        }
+                    }
+                } else {
+                    if (callback != null) {
+                        callback.onError("포인트 정보를 가져오는데 실패했습니다.");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                if (callback != null) {
+                    callback.onError("네트워크 오류가 발생했습니다.");
+                }
+            }
+        });
     }
 
     public interface LogoutCallback {

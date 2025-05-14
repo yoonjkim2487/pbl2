@@ -218,26 +218,6 @@
                                 android:textColor="@color/sub_green"/>
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <CheckBox
-                                android:id="@+id/cb_marketing"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="(선택) 마케팅 정보 수신" />
-
-                            <TextView
-                                android:id="@+id/tv_marketing_detail"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="8dp"
-                                android:text="보기"
-                                android:textColor="@color/sub_green"/>
-                        </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

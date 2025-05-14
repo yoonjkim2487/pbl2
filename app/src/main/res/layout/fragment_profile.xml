@@ -24,16 +24,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <ImageView
-            android:id="@+id/btn_alarm"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_alarm"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 메인 컨텐츠 영역 -->
@@ -125,7 +115,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginTop="24dp"
             app:cardCornerRadius="20dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/cv_profile"
             app:layout_constraintStart_toStartOf="parent"
@@ -212,6 +202,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+
         <!-- 재활용 통계 카드들 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -229,7 +220,7 @@
                 android:layout_width="150dp"
                 android:layout_height="174dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -291,7 +282,7 @@
                 android:layout_width="150dp"
                 android:layout_height="80dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -358,7 +349,7 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="14dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_sub_stat1">
@@ -419,7 +410,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,14 +28,6 @@
                 android:fontFamily="@font/jalnan"
                 android:layout_gravity="center"/>
 
-            <ImageView
-                android:id="@+id/btn_alarm"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_alarm"
-                android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                app:tint="@color/white"/>
         </androidx.appcompat.widget.Toolbar>
 
         <!-- 스크롤되는 검색창 영역 -->
@@ -46,13 +38,16 @@
             android:padding="16dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <!-- 검색창 -->
+            <!-- 검색창 - 클릭 가능하게 수정 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/layout_search"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="0dp">
+                app:cardElevation="2dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,16 +56,24 @@
                     android:gravity="center_vertical"
                     android:paddingHorizontal="16dp">
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/edit_search"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="찾는 상품이 있으신가요?"
-                        android:textColor="@color/gray"
+                        android:background="@null"
+                        android:hint="찾는 상품이 있으신가요?"
+                        android:textColorHint="@color/gray"
+                        android:textColor="@color/text_primary"
                         android:textSize="16sp"
-                        android:fontFamily="@font/jeongi_anjunche"/>
+                        android:fontFamily="@font/jeongi_anjunche"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"/>
 
                     <ImageView
+                        android:id="@+id/img_search"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_search"
@@ -96,7 +99,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -183,7 +188,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:clipToPadding="false"/>
+                android:clipToPadding="false"
+                android:paddingBottom="16dp"/>
+
+            <!-- 추가: 하단 여백 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
