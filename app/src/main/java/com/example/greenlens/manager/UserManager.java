@@ -2,6 +2,7 @@ package com.example.greenlens.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import com.example.greenlens.api.ApiClient;
 import com.example.greenlens.api.ApiService;
 import com.example.greenlens.model.User;
@@ -10,13 +11,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.Map;
-
 public class UserManager {
     private static final String PREF_NAME = "UserPrefs";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String TAG = "UserManager";
 
     private static UserManager instance;
     private SharedPreferences prefs;
@@ -37,14 +37,24 @@ public class UserManager {
     }
 
     public void saveUserSession(String token, String email) {
+        Log.d(TAG, "Saving user session - Token: " + token);
+
+        // 토큰이 "Bearer "로 시작하는지 확인하고 저장
+        String tokenToSave = token;
+        if (token != null && !token.startsWith("Bearer ")) {
+            tokenToSave = "Bearer " + token;
+        }
+
+        Log.d(TAG, "Final token to save: " + tokenToSave);
+
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(KEY_TOKEN, token);
+        editor.putString(KEY_TOKEN, tokenToSave);
         editor.putString(KEY_EMAIL, email);
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
 
         // 사용자 프로필 정보 가져오기
-        userRepository.fetchUserProfile(token, new UserRepository.UserProfileCallback() {
+        userRepository.fetchUserProfile(tokenToSave, new UserRepository.UserProfileCallback() {
             @Override
             public void onSuccess(User user) {
                 // 프로필 정보 저장 완료
@@ -54,12 +64,14 @@ public class UserManager {
             @Override
             public void onError(String message) {
                 // 에러 처리
+                Log.e(TAG, "Error fetching user profile: " + message);
                 clearUserSession();
             }
         });
     }
 
     public void clearUserSession() {
+        Log.d(TAG, "Clearing user session");
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(KEY_TOKEN);
         editor.remove(KEY_EMAIL);
@@ -69,7 +81,9 @@ public class UserManager {
     }
 
     public String getToken() {
-        return prefs.getString(KEY_TOKEN, null);
+        String token = prefs.getString(KEY_TOKEN, null);
+        Log.d(TAG, "Getting token: " + token);
+        return token;
     }
 
     public String getEmail() {
@@ -77,7 +91,20 @@ public class UserManager {
     }
 
     public boolean isLoggedIn() {
-        return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
+        boolean isLoggedIn = prefs.getBoolean(KEY_IS_LOGGED_IN, false);
+        String token = getToken();
+        Log.d(TAG, "isLoggedIn check: " + isLoggedIn + ", token present: " + (token != null && !token.isEmpty()));
+
+        // 로그인 상태이지만 토큰이 없는 경우, 로그인 상태를 false로 업데이트
+        if (isLoggedIn && (token == null || token.isEmpty())) {
+            Log.w(TAG, "User marked as logged in but token is missing, updating status");
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(KEY_IS_LOGGED_IN, false);
+            editor.apply();
+            return false;
+        }
+
+        return isLoggedIn;
     }
 
     public User getCurrentUser() {
@@ -93,55 +120,6 @@ public class UserManager {
                 callback.onError("로그인이 필요합니다.");
             }
         }
-    }
-
-    public interface PointsCallback {
-        void onSuccess(int points, String lastUpdated);
-        void onError(String message);
-    }
-
-    public void getUserPoints(PointsCallback callback) {
-        String token = getToken();
-        User currentUser = getCurrentUser();
-
-        if (token == null || currentUser == null) {
-            if (callback != null) {
-                callback.onError("로그인이 필요합니다.");
-            }
-            return;
-        }
-
-        String authToken = "Bearer " + token;
-        apiService.getUserPoints(authToken, currentUser.getId()).enqueue(new Callback<Map<String, Object>>() {
-            @Override
-            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Map<String, Object> result = response.body();
-                    try {
-                        int points = ((Number) result.get("points")).intValue();
-                        String lastUpdated = (String) result.get("last_updated");
-                        if (callback != null) {
-                            callback.onSuccess(points, lastUpdated);
-                        }
-                    } catch (Exception e) {
-                        if (callback != null) {
-                            callback.onError("포인트 정보를 처리하는 중 오류가 발생했습니다.");
-                        }
-                    }
-                } else {
-                    if (callback != null) {
-                        callback.onError("포인트 정보를 가져오는데 실패했습니다.");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                if (callback != null) {
-                    callback.onError("네트워크 오류가 발생했습니다.");
-                }
-            }
-        });
     }
 
     public interface LogoutCallback {

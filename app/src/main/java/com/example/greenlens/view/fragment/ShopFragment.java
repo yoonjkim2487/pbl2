@@ -1,5 +1,6 @@
 package com.example.greenlens.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.greenlens.R;
 import com.example.greenlens.model.Coupon;
 import com.example.greenlens.repository.CouponRepository;
+import com.example.greenlens.view.ShopDetailActivity;
 import com.example.greenlens.view.adapter.ShopCouponAdapter;
 
 import java.util.ArrayList;
@@ -122,7 +124,18 @@ public class ShopFragment extends Fragment {
 
         // 아이템 클릭 리스너
         adapter.setOnCouponClickListener((coupon, position) -> {
-            // TODO: 상품 상세 페이지로 이동
+            // 상품 상세 페이지로 이동
+            Intent intent = new Intent(requireContext(), ShopDetailActivity.class);
+            // 선택한 쿠폰 정보를 Intent에 추가
+            intent.putExtra("BRAND_NAME", coupon.getBrandName());
+            intent.putExtra("PRODUCT_NAME", coupon.getProductName());
+            intent.putExtra("POINTS", coupon.getPoints());
+            intent.putExtra("CATEGORY", coupon.getCategory());
+            intent.putExtra("IMAGE_RES_ID", coupon.getImageResId());
+            intent.putExtra("EXPIRE_DATE", coupon.getExpireDate());
+            startActivity(intent);
+
+            // 디버깅용 토스트 메시지
             Toast.makeText(requireContext(),
                     coupon.getProductName() + " 상세 페이지로 이동합니다.",
                     Toast.LENGTH_SHORT).show();

@@ -107,4 +107,5 @@
     <style name="IconStyle">
         <item name="tint">@color/main_green</item>
     </style>
+
 </resources>

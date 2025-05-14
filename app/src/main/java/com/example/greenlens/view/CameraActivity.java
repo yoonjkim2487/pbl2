@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.greenlens.api.ApiClient;
 import com.example.greenlens.api.ApiService;
 import com.example.greenlens.databinding.ActivityCameraBinding;
+import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.response.AnalysisResultResponse;
 import com.example.greenlens.model.response.AnalyzeResponse;
 import com.example.greenlens.view.fragment.ResultBottomSheetDialog;
@@ -53,6 +55,8 @@ public class CameraActivity extends AppCompatActivity {
     private File currentPhotoFile;
     private ApiService apiService;
     private String authToken;
+    private UserManager userManager;
+    private static final String TAG = "CameraActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +67,27 @@ public class CameraActivity extends AppCompatActivity {
         // API 서비스 초기화
         apiService = ApiClient.getInstance().getApiService();
 
-        // SharedPreferences에서 토큰 가져오기
-        SharedPreferences prefs = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        authToken = prefs.getString("auth_token", "");
+        // UserManager 초기화 및 토큰 가져오기
+        userManager = UserManager.getInstance(this);
+        String token = userManager.getToken();
+
+        Log.d(TAG, "Token from UserManager: " + token);
 
         // 토큰이 없으면 에러 메시지 표시 후 종료
-        if (authToken.isEmpty()) {
+        if (token == null || token.isEmpty()) {
             Toast.makeText(this, "로그인이 필요한 서비스입니다.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // Bearer 접두사 추가
+        // 서버 API 요구사항에 맞게 토큰 형식 조정
+        // Bearer 접두사 추가 (서버에서 "Bearer "로 시작하는 형식 요구)
+        authToken = token;
         if (!authToken.startsWith("Bearer ")) {
             authToken = "Bearer " + authToken;
         }
+
+        Log.d(TAG, "Final auth token: " + authToken);
 
         if (allPermissionsGranted()) {
             startCamera();
@@ -219,13 +229,20 @@ public class CameraActivity extends AppCompatActivity {
                 requestFile
         );
 
+        Log.d(TAG, "API 호출 시작 - 토큰: " + authToken);
+        Log.d(TAG, "이미지 파일 경로: " + currentPhotoFile.getAbsolutePath());
+
         // API 호출
         apiService.analyzeImage(authToken, imagePart).enqueue(new Callback<AnalyzeResponse>() {
             @Override
             public void onResponse(Call<AnalyzeResponse> call, Response<AnalyzeResponse> response) {
+                Log.d(TAG, "API 응답 - 상태 코드: " + response.code());
+
                 if (response.isSuccessful() && response.body() != null) {
                     AnalyzeResponse analyzeResponse = response.body();
                     Long analysisId = analyzeResponse.getAnalysisId();
+
+                    Log.d(TAG, "분석 ID: " + analysisId);
 
                     // 분석이 완료될 때까지 잠시 대기
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -234,15 +251,25 @@ public class CameraActivity extends AppCompatActivity {
                 } else {
                     runOnUiThread(() -> {
                         binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(CameraActivity.this,
-                                "이미지 분석 요청에 실패했습니다: " + response.code(),
-                                Toast.LENGTH_SHORT).show();
+                        String errorMessage = "이미지 분석 요청에 실패했습니다: " + response.code();
+                        try {
+                            // 에러 응답 바디를 확인하여 더 자세한 오류 정보 표시
+                            if (response.errorBody() != null) {
+                                String errorBody = response.errorBody().string();
+                                errorMessage += " - " + errorBody;
+                                Log.e(TAG, "에러 응답: " + errorBody);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(CameraActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                     });
                 }
             }
 
             @Override
             public void onFailure(Call<AnalyzeResponse> call, Throwable t) {
+                Log.e(TAG, "API 호출 실패", t);
                 runOnUiThread(() -> {
                     binding.progressBar.setVisibility(View.GONE);
                     Toast.makeText(CameraActivity.this,

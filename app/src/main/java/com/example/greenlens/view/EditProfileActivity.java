@@ -12,6 +12,7 @@ import com.example.greenlens.api.ApiService;
 import com.example.greenlens.databinding.ActivityEditProfileBinding;
 import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.User;
+import com.example.greenlens.repository.UserRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +26,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private UserManager userManager;
     private ApiService apiService;
     private User currentUser;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         userManager = UserManager.getInstance(this);
         apiService = ApiClient.getInstance().getApiService();
+        userRepository = UserRepository.getInstance(this);
 
         setupViews();
         loadUserProfile();
@@ -116,13 +119,13 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 showLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
+                    // 수정된 사용자 정보를 로컬에 저장
+                    User updatedUser = response.body();
+                    userRepository.saveUser(updatedUser);
+
                     Toast.makeText(EditProfileActivity.this, "프로필이 성공적으로 수정되었습니다.", Toast.LENGTH_SHORT).show();
-                    // 로그아웃 처리
-                    userManager.clearUserSession();
-                    // 로그인 화면으로 이동
-                    Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+
+                    // 이전 화면으로 돌아가기
                     finish();
                 } else {
                     Toast.makeText(EditProfileActivity.this, "프로필 수정에 실패했습니다.", Toast.LENGTH_SHORT).show();

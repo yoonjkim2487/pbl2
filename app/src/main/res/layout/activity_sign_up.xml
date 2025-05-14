@@ -42,14 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    app:cardBackgroundColor="#F5F5F5"
+                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="0dp">
 
@@ -168,6 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="전체 동의"
+                            android:textColor="#666666"
                             android:textStyle="bold" />
 
                         <View
@@ -186,6 +179,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="#666666"
                                 android:text="(필수) 서비스 이용약관"/>
 
                             <TextView
@@ -207,6 +201,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="#666666"
                                 android:text="(필수) 개인정보 처리방침" />
 
                             <TextView
@@ -234,6 +229,22 @@
                     android:fontFamily="@font/jeongi_anjunche" />
 
             </LinearLayout>
+
+            <!-- 프로그레스바를 마지막에 배치하여 가장 위에 표시되도록 함 -->
+            <FrameLayout
+                android:id="@+id/progress_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="#80000000">
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/main_green"/>
+            </FrameLayout>
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>
 
