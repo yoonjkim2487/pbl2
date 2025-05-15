@@ -7,6 +7,10 @@ import com.example.greenlens.model.response.LoginResponse;
 import com.example.greenlens.model.response.SignupResponse;
 import com.example.greenlens.model.response.AnalyzeResponse;
 import com.example.greenlens.model.response.AnalysisResultResponse;
+import com.example.greenlens.model.Point;
+import com.example.greenlens.model.response.PointResponse;
+import com.example.greenlens.model.request.PointUseRequest;
+import com.example.greenlens.model.AppSettings;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,6 +24,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.Part;
 
 import java.util.Map;
+import java.util.List;
 import okhttp3.MultipartBody;
 
 public interface ApiService {
@@ -53,4 +58,51 @@ public interface ApiService {
     Call<AnalysisResultResponse> getAnalysisResult(
             @Header("Authorization") String token,
             @Path("analysis_id") Long analysisId);
+
+    // 포인트 조회 API
+    @GET("users/{user_id}/points")
+    Call<PointResponse> getUserPoints(
+            @Header("Authorization") String token,
+            @Path("user_id") Long userId);
+
+    // 포인트 사용 API
+    @POST("users/{user_id}/points/use")
+    Call<PointResponse> usePoints(
+            @Header("Authorization") String token,
+            @Path("user_id") Long userId,
+            @Body PointUseRequest request);
+
+    // 포인트 내역 조회 API
+    @GET("users/{user_id}/points/history")
+    Call<List<Point>> getPointHistory(
+            @Header("Authorization") String token);
+
+    // 분리수거 활동 기록 API
+    @POST("recycle/log")
+    Call<Map<String, Object>> logRecycleActivity(
+            @Header("Authorization") String token,
+            @Body Map<String, Object> logData);
+
+    // 분리수거 활동 조회 API
+    @GET("recycle/log/{user_id}")
+    Call<List<Map<String, Object>>> getRecycleActivities(
+            @Header("Authorization") String token,
+            @Path("user_id") Long userId);
+
+    // 분리수거 활동 삭제 API
+    @DELETE("recycle/log/{log_id}")
+    Call<Map<String, Object>> deleteRecycleActivity(
+            @Header("Authorization") String token,
+            @Path("log_id") Long logId);
+
+    // 앱 설정 조회 API
+    @GET("settings")
+    Call<AppSettings> getAppSettings(
+            @Header("Authorization") String token);
+
+    // 앱 설정 변경 API
+    @PUT("settings")
+    Call<AppSettings> updateAppSettings(
+            @Header("Authorization") String token,
+            @Body AppSettings settings);
 }

@@ -20,10 +20,6 @@ public class User {
         return id;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public void setUserId(Long id) {
         this.id = id;
     }

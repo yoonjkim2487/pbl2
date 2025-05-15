@@ -12,6 +12,7 @@ import com.example.greenlens.api.ApiService;
 import com.example.greenlens.databinding.ActivityEditProfileBinding;
 import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.User;
+import com.example.greenlens.model.response.PointResponse;
 import com.example.greenlens.repository.UserRepository;
 
 import retrofit2.Call;
@@ -40,6 +41,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         setupViews();
         loadUserProfile();
+        loadUserPoints();
     }
 
     private void setupViews() {
@@ -67,6 +69,31 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onFailure(Call<User> call, Throwable t) {
                 showLoading(false);
                 Toast.makeText(EditProfileActivity.this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadUserPoints() {
+        if (currentUser == null || currentUser.getUserId() == null) {
+            return;
+        }
+
+        String token = "Bearer " + userManager.getToken();
+        apiService.getUserPoints(token, currentUser.getUserId()).enqueue(new Callback<PointResponse>() {
+            @Override
+            public void onResponse(Call<PointResponse> call, Response<PointResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    PointResponse pointResponse = response.body();
+                    binding.tvPoints.setText(String.valueOf(pointResponse.getPoints()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PointResponse> call, Throwable t) {
+                // 오류 발생 시 처리 (User 객체의 포인트를 사용)
+                if (currentUser != null) {
+                    binding.tvPoints.setText(String.valueOf(currentUser.getPoints()));
+                }
             }
         });
     }
