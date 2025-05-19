@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.greenlens.R;
 import com.example.greenlens.databinding.ActivityMainBinding;
+import com.example.greenlens.manager.UserManager;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -21,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.bottomNavigationView.setBackground(null);
+
+        // 토큰 상태 확인
+        UserManager userManager = UserManager.getInstance(this);
+        android.util.Log.d("MainActivity", "Token on startup: " + userManager.getToken());
+        android.util.Log.d("MainActivity", "User is logged in: " + userManager.isLoggedIn());
 
         // NavHostFragment 가져오기
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -35,8 +41,5 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CameraActivity.class);
             startActivity(intent);
         });
-
-
     }
-
 }

@@ -84,37 +84,42 @@ public class SettingActivity extends AppCompatActivity {
 
     private void deleteAccount() {
         showLoading(true);
-        String token = "Bearer " + userManager.getToken();
+        String token = userManager.getToken();
+
+        if (token == null) {
+            showLoading(false);
+            Toast.makeText(SettingActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // 먼저 프로필 정보를 가져와서 userId를 얻습니다
-        userManager.getApiService().getUserProfile(token).enqueue(new retrofit2.Callback<User>() {
+        userManager.fetchUserProfile(token, new UserManager.UserProfileCallback() {
             @Override
-            public void onResponse(retrofit2.Call<User> call, retrofit2.Response<User> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    User user = response.body();
-                    if (user.getUserId() != null) {
-                        // userId를 얻었으면 삭제 진행
-                        performDeleteAccount(token, user.getUserId());
-                    } else {
-                        showLoading(false);
-                        Toast.makeText(SettingActivity.this, "사용자 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
+            public void onSuccess(User user) {
+                if (user.getUserId() != null) {
+                    // userId를 얻었으면 삭제 진행
+                    performDeleteAccount(token, user.getUserId());
                 } else {
                     showLoading(false);
-                    Toast.makeText(SettingActivity.this, "사용자 정보를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, "사용자 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<User> call, Throwable t) {
+            public void onError(String message) {
                 showLoading(false);
-                Toast.makeText(SettingActivity.this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this, "사용자 정보를 가져오는데 실패했습니다: " + message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void performDeleteAccount(String token, Long userId) {
-        userManager.getApiService().deleteAccount(token, userId).enqueue(new retrofit2.Callback<Void>() {
+        String authToken = token;
+        if (token != null && !token.startsWith("Bearer ")) {
+            authToken = "Bearer " + token;
+        }
+
+        userManager.getApiService().deleteAccount(authToken, userId).enqueue(new retrofit2.Callback<Void>() {
             @Override
             public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
                 showLoading(false);

@@ -55,7 +55,12 @@ public class UserRepository {
     }
 
     public void fetchUserProfile(String token, UserProfileCallback callback) {
-        apiService.getUserProfile("Bearer " + token).enqueue(new Callback<User>() {
+        String authToken = token;
+        if (token != null && !token.startsWith("Bearer ")) {
+            authToken = "Bearer " + token;
+        }
+
+        apiService.getUserProfile(authToken).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -80,7 +85,12 @@ public class UserRepository {
             return;
         }
 
-        apiService.updateUserProfile("Bearer " + token, user.getUserId(), user).enqueue(new Callback<User>() {
+        String authToken = token;
+        if (token != null && !token.startsWith("Bearer ")) {
+            authToken = "Bearer " + token;
+        }
+
+        apiService.updateUserProfile(authToken, user.getUserId(), user).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {

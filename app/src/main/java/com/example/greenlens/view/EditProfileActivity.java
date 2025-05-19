@@ -41,7 +41,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         setupViews();
         loadUserProfile();
-        loadUserPoints();
     }
 
     private void setupViews() {
@@ -51,35 +50,50 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void loadUserProfile() {
         showLoading(true);
-        String token = "Bearer " + userManager.getToken();
+        String token = userManager.getToken();
 
-        apiService.getUserProfile(token).enqueue(new Callback<User>() {
+        if (token == null) {
+            showLoading(false);
+            Toast.makeText(EditProfileActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        userManager.fetchUserProfile(token, new UserManager.UserProfileCallback() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onSuccess(User user) {
                 showLoading(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    currentUser = response.body();
-                    updateUI(currentUser);
-                } else {
-                    Toast.makeText(EditProfileActivity.this, "프로필 정보를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                currentUser = user;
+                updateUI(currentUser);
+                // 사용자 정보 로드 후 포인트 조회
+                if (user.getUserId() != null) {
+                    loadUserPoints(token, user.getUserId());
                 }
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onError(String message) {
                 showLoading(false);
-                Toast.makeText(EditProfileActivity.this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProfileActivity.this, "프로필 정보를 불러오는데 실패했습니다: " + message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void loadUserPoints() {
-        if (currentUser == null || currentUser.getUserId() == null) {
+    private void loadUserPoints(String token, Long userId) {
+        if (userId == null) {
             return;
         }
 
-        String token = "Bearer " + userManager.getToken();
-        apiService.getUserPoints(token, currentUser.getUserId()).enqueue(new Callback<PointResponse>() {
+        if (token == null) {
+            return;
+        }
+
+        String authToken = token;
+        if (!token.startsWith("Bearer ")) {
+            authToken = "Bearer " + token;
+        }
+
+        apiService.getUserPoints(authToken, userId).enqueue(new Callback<PointResponse>() {
             @Override
             public void onResponse(Call<PointResponse> call, Response<PointResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -109,39 +123,31 @@ public class EditProfileActivity extends AppCompatActivity {
         if (!validateInputs()) return;
 
         showLoading(true);
-        String token = "Bearer " + userManager.getToken();
+        String token = userManager.getToken();
 
-        // 먼저 프로필 정보를 가져와서 userId를 얻습니다
-        apiService.getUserProfile(token).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    User user = response.body();
-                    if (user.getUserId() != null) {
-                        // userId를 얻었으면 수정 진행
-                        user.setUsername(binding.etNickname.getText().toString());
-                        user.setEmail(binding.etEmail.getText().toString());
-                        performUpdateProfile(token, user);
-                    } else {
-                        showLoading(false);
-                        Toast.makeText(EditProfileActivity.this, "사용자 ID를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    showLoading(false);
-                    Toast.makeText(EditProfileActivity.this, "사용자 정보를 가져오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
+        if (token == null) {
+            showLoading(false);
+            Toast.makeText(EditProfileActivity.this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                showLoading(false);
-                Toast.makeText(EditProfileActivity.this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+        if (currentUser == null || currentUser.getUserId() == null) {
+            showLoading(false);
+            Toast.makeText(EditProfileActivity.this, "사용자 정보가 없습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-    private void performUpdateProfile(String token, User user) {
-        apiService.updateUserProfile(token, user.getUserId(), user).enqueue(new Callback<User>() {
+        // 현재 사용자 정보 업데이트
+        currentUser.setUsername(binding.etNickname.getText().toString());
+        currentUser.setEmail(binding.etEmail.getText().toString());
+
+        // 사용자 정보 수정 요청
+        String authToken = token;
+        if (!token.startsWith("Bearer ")) {
+            authToken = "Bearer " + token;
+        }
+
+        apiService.updateUserProfile(authToken, currentUser.getUserId(), currentUser).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 showLoading(false);
@@ -149,6 +155,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     // 수정된 사용자 정보를 로컬에 저장
                     User updatedUser = response.body();
                     userRepository.saveUser(updatedUser);
+                    userManager.saveUser(updatedUser);
 
                     Toast.makeText(EditProfileActivity.this, "프로필이 성공적으로 수정되었습니다.", Toast.LENGTH_SHORT).show();
 
