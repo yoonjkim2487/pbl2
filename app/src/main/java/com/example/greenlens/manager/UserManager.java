@@ -1,5 +1,8 @@
 package com.example.greenlens.manager;
 
+import static com.example.greenlens.constant.ConstPref.PREF_NAME;
+import static com.example.greenlens.constant.ConstLog.TAG;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -10,13 +13,14 @@ import com.example.greenlens.repository.UserRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.example.greenlens.constant.ConstPref;
+import com.example.greenlens.constant.ConstLog;
 
 public class UserManager {
-    private static final String PREF_NAME = "UserPrefs";
+    
     private static final String KEY_TOKEN = "token";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
-    private static final String TAG = "UserManager";
 
     private static UserManager instance;
     private SharedPreferences prefs;
