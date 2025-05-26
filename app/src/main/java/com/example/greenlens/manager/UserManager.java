@@ -10,6 +10,7 @@ import com.example.greenlens.api.ApiClient;
 import com.example.greenlens.api.ApiService;
 import com.example.greenlens.model.User;
 import com.example.greenlens.repository.UserRepository;
+import com.example.greenlens.util.DevLog;
 import com.google.gson.Gson;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,7 +92,7 @@ public class UserManager {
         // 토큰 만료 검사는 임시로 제거 (서버에서 토큰 만료 시간을 받을 때까지)
         // boolean tokenNotExpired = !isTokenExpired();
 
-        Log.d(TAG, "isLoggedIn check - tokenExists: " + tokenExists +
+        DevLog.d(TAG, "isLoggedIn check - tokenExists: " + tokenExists +
                 ", isLoggedInPref: " + isLoggedInPref);
 
         // 메모리에 토큰이 있고, SharedPreferences에 로그인 상태가 저장되어 있으면 로그인된 것으로 간주
@@ -165,7 +166,7 @@ public class UserManager {
             logout();
             callback.onSuccess();
         } catch (Exception e) {
-            Log.e(TAG, "Error during logout: " + e.getMessage());
+            DevLog.e(TAG, "Error during logout: " + e.getMessage());
             callback.onError("로그아웃 중 오류가 발생했습니다.");
         }
     }
@@ -181,7 +182,7 @@ public class UserManager {
     }
 
     public void saveUserSession(String token, String email) {
-        Log.d(TAG, "Saving user session - Token: " + token);
+        DevLog.d(TAG, "Saving user session - Token: " + token);
 
         // 토큰 저장 (Bearer 접두사 없이 원본 토큰만 저장)
         String tokenToSave = token;
@@ -189,7 +190,7 @@ public class UserManager {
             tokenToSave = token.substring(7);
         }
 
-        Log.d(TAG, "Cleaned token to save: " + tokenToSave);
+        DevLog.d(TAG, "Cleaned token to save: " + tokenToSave);
         this.token = tokenToSave;
 
         SharedPreferences.Editor editor = preferences.edit();
@@ -209,14 +210,14 @@ public class UserManager {
             @Override
             public void onSuccess(User user) {
                 // 프로필 정보 저장 완료
-                Log.d(TAG, "User profile fetched successfully: " + user.getUsername());
+                DevLog.d(TAG, "User profile fetched successfully: " + user.getUsername());
                 userRepository.saveUser(user);
             }
 
             @Override
             public void onError(String message) {
                 // 에러 처리
-                Log.e(TAG, "Error fetching user profile: " + message);
+                DevLog.e(TAG, "Error fetching user profile: " + message);
                 logout();
             }
         });
@@ -241,7 +242,7 @@ public class UserManager {
     }
 
     public void clearUserSession() {
-        Log.d(TAG, "Clearing user session");
+        DevLog.d(TAG, "Clearing user session");
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(KEY_TOKEN);
         editor.remove(KEY_EMAIL);

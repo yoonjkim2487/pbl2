@@ -2,6 +2,7 @@ package com.example.greenlens.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.greenlens.R;
 import com.example.greenlens.databinding.ActivityMainBinding;
 import com.example.greenlens.manager.UserManager;
+import com.example.greenlens.util.DevLog;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -25,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         // 토큰 상태 확인
         UserManager userManager = UserManager.getInstance(this);
-        android.util.Log.d("MainActivity", "Token on startup: " + userManager.getToken());
-        android.util.Log.d("MainActivity", "User is logged in: " + userManager.isLoggedIn());
+        DevLog.d("MainActivity", "Token on startup: " + userManager.getToken());
+        DevLog.d("MainActivity", "User is logged in: " + userManager.isLoggedIn());
 
         // NavHostFragment 가져오기
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()

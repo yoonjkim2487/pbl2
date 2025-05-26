@@ -15,6 +15,7 @@ import com.example.greenlens.databinding.ActivityPointHistoryBinding;
 import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.Point;
 import com.example.greenlens.repository.PointRepository;
+import com.example.greenlens.util.DevLog;
 import com.example.greenlens.view.adapter.PointHistoryAdapter;
 
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class PointHistoryActivity extends AppCompatActivity {
             return;
         }
 
-        Log.d(TAG, "포인트 내역 불러오기 시작...");
+        DevLog.d(TAG, "포인트 내역 불러오기 시작...");
 
         // PointRepository를 통해 데이터 로드
         pointRepository.getPointHistory(token, new PointRepository.PointCallback<List<Point>>() {
@@ -120,10 +121,10 @@ public class PointHistoryActivity extends AppCompatActivity {
                         Collections.reverse(result);
                         adapter.setPoints(result);
                         showEmptyView(false);
-                        Log.d(TAG, "포인트 내역 " + result.size() + "개 로드 완료");
+                        DevLog.d(TAG, "포인트 내역 " + result.size() + "개 로드 완료");
                     } else {
                         showEmptyView(true);
-                        Log.d(TAG, "포인트 내역이 없습니다.");
+                        DevLog.d(TAG, "포인트 내역이 없습니다.");
                     }
                 });
             }
@@ -135,7 +136,7 @@ public class PointHistoryActivity extends AppCompatActivity {
                     showError(message);
                     // 오류 발생 시 빈 화면 표시
                     showEmptyView(true);
-                    Log.e(TAG, "포인트 내역 로드 실패: " + message);
+                    DevLog.e(TAG, "포인트 내역 로드 실패: " + message);
                 });
             }
         });

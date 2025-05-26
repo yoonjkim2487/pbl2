@@ -31,6 +31,7 @@ import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.User;
 import com.example.greenlens.model.response.AnalysisResultResponse;
 import com.example.greenlens.model.response.AnalyzeResponse;
+import com.example.greenlens.util.DevLog;
 import com.example.greenlens.view.fragment.ResultBottomSheetDialog;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -89,7 +90,7 @@ public class CameraActivity extends AppCompatActivity {
 
         // 인증 토큰 가져오기 (자동으로 Bearer 접두사 추가됨)
         authToken = userManager.getAuthToken();
-        Log.d(TAG, "Auth token for API calls: " + authToken);
+        DevLog.d(TAG, "Auth token for API calls: " + authToken);
 
         // 토큰이 없으면 에러 메시지 표시 후 종료
         if (authToken == null || authToken.isEmpty()) {
@@ -131,9 +132,9 @@ public class CameraActivity extends AppCompatActivity {
                         initCamera();
                     }
 
-                    Log.d(TAG, "onResume: 카메라 재시작 완료");
+                    DevLog.d(TAG, "onResume: 카메라 재시작 완료");
                 } catch (Exception e) {
-                    Log.e(TAG, "onResume: 카메라 재시작 실패", e);
+                    DevLog.e(TAG, "onResume: 카메라 재시작 실패", e);
                     // 초기화 상태 재설정 후 다시 시도
                     isCameraInitialized = false;
                     initCamera();
@@ -158,10 +159,10 @@ public class CameraActivity extends AppCompatActivity {
         // 액티비티가 더 이상 보이지 않을 때 카메라 리소스 강제 해제
         if (cameraProvider != null) {
             try {
-                Log.d(TAG, "onStop에서 카메라 리소스 해제");
+                DevLog.d(TAG, "onStop에서 카메라 리소스 해제");
                 cameraProvider.unbindAll();
             } catch (Exception e) {
-                Log.e(TAG, "onStop에서 카메라 리소스 해제 실패", e);
+                DevLog.e(TAG, "onStop에서 카메라 리소스 해제 실패", e);
             }
         }
     }
@@ -173,7 +174,7 @@ public class CameraActivity extends AppCompatActivity {
             startCamera();
         } catch (Exception e) {
             isCameraInitialized = false;
-            Log.e(TAG, "카메라 초기화 실패", e);
+            DevLog.e(TAG, "카메라 초기화 실패", e);
             Toast.makeText(this, "카메라를 초기화할 수 없습니다: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -181,11 +182,11 @@ public class CameraActivity extends AppCompatActivity {
     private void releaseCamera() {
         try {
             if (cameraProvider != null) {
-                Log.d(TAG, "카메라 리소스 해제 중...");
+                DevLog.d(TAG, "카메라 리소스 해제 중...");
                 cameraProvider.unbindAll();
             }
         } catch (Exception e) {
-            Log.e(TAG, "카메라 리소스 해제 실패", e);
+            DevLog.e(TAG, "카메라 리소스 해제 실패", e);
         }
     }
 
@@ -251,7 +252,7 @@ public class CameraActivity extends AppCompatActivity {
 
                 // 뷰가 보이지 않으면 카메라를 시작하지 않음
                 if (binding.viewFinder.getVisibility() != View.VISIBLE) {
-                    Log.d(TAG, "뷰파인더가 보이지 않아 카메라 시작 취소");
+                    DevLog.d(TAG, "뷰파인더가 보이지 않아 카메라 시작 취소");
                     return;
                 }
 
@@ -267,17 +268,17 @@ public class CameraActivity extends AppCompatActivity {
                 try {
                     // 카메라를 현재 액티비티의 라이프사이클에 바인딩
                     cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
-                    Log.d(TAG, "카메라 시작 성공");
+                    DevLog.d(TAG, "카메라 시작 성공");
                 } catch (Exception e) {
-                    Log.e(TAG, "카메라 바인딩 오류", e);
+                    DevLog.e(TAG, "카메라 바인딩 오류", e);
                     Toast.makeText(this, "카메라 초기화 오류: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             } catch (ExecutionException | InterruptedException e) {
-                Log.e(TAG, "카메라 시작 실패", e);
+                DevLog.e(TAG, "카메라 시작 실패", e);
                 Toast.makeText(this, "카메라를 시작할 수 없습니다: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Log.e(TAG, "카메라 시작 중 예상치 못한 오류", e);
+                DevLog.e(TAG, "카메라 시작 중 예상치 못한 오류", e);
                 Toast.makeText(this, "카메라 초기화 오류: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }, ContextCompat.getMainExecutor(this));
@@ -285,7 +286,7 @@ public class CameraActivity extends AppCompatActivity {
 
     private void takePhoto() {
         if (imageCapture == null) {
-            Log.e(TAG, "imageCapture가 null입니다. 카메라가 초기화되지 않았습니다.");
+            DevLog.e(TAG, "imageCapture가 null입니다. 카메라가 초기화되지 않았습니다.");
             Toast.makeText(this, "카메라가 초기화되지 않았습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
 
             // 카메라 재초기화 시도
@@ -297,7 +298,7 @@ public class CameraActivity extends AppCompatActivity {
                 // 재시도를 권장하는 메시지 표시
                 Toast.makeText(this, "카메라를 다시 초기화했습니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Log.e(TAG, "카메라 재초기화 실패", e);
+                DevLog.e(TAG, "카메라 재초기화 실패", e);
             }
             return;
         }
@@ -314,9 +315,9 @@ public class CameraActivity extends AppCompatActivity {
             if (directory == null || !directory.exists()) {
                 if (directory != null) {
                     boolean created = directory.mkdirs();
-                    Log.d(TAG, "디렉토리 생성 결과: " + created);
+                    DevLog.d(TAG, "디렉토리 생성 결과: " + created);
                 } else {
-                    Log.e(TAG, "외부 캐시 디렉토리가 null입니다");
+                    DevLog.e(TAG, "외부 캐시 디렉토리가 null입니다");
                     Toast.makeText(this, "저장 공간에 접근할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     binding.overlayView.setVisibility(View.GONE);
                     return;
@@ -334,7 +335,7 @@ public class CameraActivity extends AppCompatActivity {
                                 if (currentPhotoFile != null && currentPhotoFile.exists() && currentPhotoFile.length() > 0) {
                                     showCapturedImage();
                                 } else {
-                                    Log.e(TAG, "저장된 이미지 파일이 없거나 크기가 0입니다.");
+                                    DevLog.e(TAG, "저장된 이미지 파일이 없거나 크기가 0입니다.");
                                     Toast.makeText(CameraActivity.this, "이미지 저장에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                     // 카메라 재시작
                                     startCamera();
@@ -346,7 +347,7 @@ public class CameraActivity extends AppCompatActivity {
                         public void onError(@NonNull ImageCaptureException exception) {
                             runOnUiThread(() -> {
                                 binding.overlayView.setVisibility(View.GONE);
-                                Log.e(TAG, "이미지 캡처 오류", exception);
+                                DevLog.e(TAG, "이미지 캡처 오류", exception);
                                 Toast.makeText(CameraActivity.this, "사진 촬영에 실패했습니다: " + exception.getMessage(),
                                         Toast.LENGTH_SHORT).show();
                                 // 카메라 재시작
@@ -356,7 +357,7 @@ public class CameraActivity extends AppCompatActivity {
                     });
         } catch (Exception e) {
             binding.overlayView.setVisibility(View.GONE);
-            Log.e(TAG, "사진 촬영 중 예외 발생", e);
+            DevLog.e(TAG, "사진 촬영 중 예외 발생", e);
             Toast.makeText(this, "사진 촬영 중 오류가 발생했습니다: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -405,25 +406,25 @@ public class CameraActivity extends AppCompatActivity {
                 requestFile
         );
 
-        Log.d(TAG, "API 호출 시작 - 토큰: " + authToken);
-        Log.d(TAG, "원본 토큰: " + userManager.getToken());
-        Log.d(TAG, "로그인 상태: " + userManager.isLoggedIn());
-        Log.d(TAG, "토큰 길이: " + (authToken != null ? authToken.length() : "null"));
-        Log.d(TAG, "토큰 앞 20자: " + (authToken != null && authToken.length() > 20 ? authToken.substring(0, 20) + "..." : authToken));
-        Log.d(TAG, "이미지 파일 경로: " + currentPhotoFile.getAbsolutePath());
-        Log.d(TAG, "이미지 파일 크기: " + currentPhotoFile.length() + " bytes");
+        DevLog.d(TAG, "API 호출 시작 - 토큰: " + authToken);
+        DevLog.d(TAG, "원본 토큰: " + userManager.getToken());
+        DevLog.d(TAG, "로그인 상태: " + userManager.isLoggedIn());
+        DevLog.d(TAG, "토큰 길이: " + (authToken != null ? authToken.length() : "null"));
+        DevLog.d(TAG, "토큰 앞 20자: " + (authToken != null && authToken.length() > 20 ? authToken.substring(0, 20) + "..." : authToken));
+        DevLog.d(TAG, "이미지 파일 경로: " + currentPhotoFile.getAbsolutePath());
+        DevLog.d(TAG, "이미지 파일 크기: " + currentPhotoFile.length() + " bytes");
 
         // API 호출
         apiService.analyzeImage(authToken, imagePart).enqueue(new Callback<AnalyzeResponse>() {
             @Override
             public void onResponse(Call<AnalyzeResponse> call, Response<AnalyzeResponse> response) {
-                Log.d(TAG, "API 응답 - 상태 코드: " + response.code());
+                DevLog.d(TAG, "API 응답 - 상태 코드: " + response.code());
 
                 if (response.isSuccessful() && response.body() != null) {
                     AnalyzeResponse analyzeResponse = response.body();
                     Long analysisId = analyzeResponse.getAnalysisId();
 
-                    Log.d(TAG, "분석 ID: " + analysisId);
+                    DevLog.d(TAG, "분석 ID: " + analysisId);
 
                     // 분석이 완료될 때까지 잠시 대기
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -438,8 +439,8 @@ public class CameraActivity extends AppCompatActivity {
                         // 403 에러인 경우 특별 처리
                         if (response.code() == 403) {
                             errorMessage = "권한이 없습니다. 서버 응답을 확인해주세요.";
-                            Log.e(TAG, "403 오류 발생 - 토큰: " + authToken);
-                            Log.e(TAG, "403 오류 발생 - 원본 토큰: " + userManager.getToken());
+                            DevLog.e(TAG, "403 오류 발생 - 토큰: " + authToken);
+                            DevLog.e(TAG, "403 오류 발생 - 원본 토큰: " + userManager.getToken());
 
                             // 임시로 토큰 삭제하지 않고 로그만 출력
                             // userManager.clearUserSession();
@@ -449,7 +450,7 @@ public class CameraActivity extends AppCompatActivity {
                             // 에러 응답 바디를 확인하여 더 자세한 오류 정보 표시
                             if (response.errorBody() != null) {
                                 String errorBody = response.errorBody().string();
-                                Log.e(TAG, "에러 응답: " + errorBody);
+                                DevLog.e(TAG, "에러 응답: " + errorBody);
 
                                 if (!errorBody.isEmpty()) {
                                     errorMessage += "\n서버 응답: " + errorBody;
@@ -465,7 +466,7 @@ public class CameraActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AnalyzeResponse> call, Throwable t) {
-                Log.e(TAG, "API 호출 실패", t);
+                DevLog.e(TAG, "API 호출 실패", t);
                 runOnUiThread(() -> {
                     binding.progressBar.setVisibility(View.GONE);
                     Toast.makeText(CameraActivity.this,
@@ -544,13 +545,13 @@ public class CameraActivity extends AppCompatActivity {
      */
     private void addUserPoints(String wasteType, int pointValue) {
         if (userManager == null || !userManager.isLoggedIn()) {
-            Log.e(TAG, "포인트 적립 실패: 사용자가 로그인되어 있지 않습니다.");
+            DevLog.e(TAG, "포인트 적립 실패: 사용자가 로그인되어 있지 않습니다.");
             return;
         }
 
         User currentUser = userManager.getCurrentUser();
         if (currentUser == null || currentUser.getUserId() == null) {
-            Log.e(TAG, "포인트 적립 실패: 사용자 정보가 없습니다.");
+            DevLog.e(TAG, "포인트 적립 실패: 사용자 정보가 없습니다.");
             return;
         }
 
@@ -567,7 +568,7 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "포인트 적립 성공: " + pointValue + "P");
+                    DevLog.d(TAG, "포인트 적립 성공: " + pointValue + "P");
 
                     // 현재 사용자의 포인트 업데이트 (UserManager에 메서드 추가 필요)
                     if (currentUser != null) {
@@ -576,13 +577,13 @@ public class CameraActivity extends AppCompatActivity {
                         userManager.saveUser(currentUser);
                     }
                 } else {
-                    Log.e(TAG, "포인트 적립 실패: " + response.code());
+                    DevLog.e(TAG, "포인트 적립 실패: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                Log.e(TAG, "포인트 적립 API 호출 실패", t);
+                DevLog.e(TAG, "포인트 적립 API 호출 실패", t);
             }
         });
     }

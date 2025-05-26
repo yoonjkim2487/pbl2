@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.greenlens.R;
 import com.example.greenlens.model.Coupon;
 import com.example.greenlens.repository.CouponRepository;
+import com.example.greenlens.util.DevLog;
 import com.example.greenlens.view.ShopDetailActivity;
 import com.example.greenlens.view.adapter.ShopCouponAdapter;
 
@@ -223,7 +224,7 @@ public class ShopFragment extends Fragment {
                     });
                 }
             } catch (Exception e) {
-                Log.e(TAG, categoryName + " 설정 중 오류 발생: " + e.getMessage());
+                DevLog.e(TAG, categoryName + " 설정 중 오류 발생: " + e.getMessage());
             }
         }
     }

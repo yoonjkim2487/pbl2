@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.greenlens.R;
+import com.example.greenlens.util.DevLog;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } catch (Exception e) {
-                Log.e("SplashActivity", "Error starting LoginActivity: " + e.getMessage());
+                DevLog.e("SplashActivity", "Error starting LoginActivity: " + e.getMessage());
             }
         }, 1000);
     }
