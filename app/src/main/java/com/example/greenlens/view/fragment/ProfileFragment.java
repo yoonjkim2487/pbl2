@@ -90,8 +90,9 @@ public class ProfileFragment extends Fragment {
 
     private void loadUserInfo() {
         String token = userManager.getToken();
+        android.util.Log.d("ProfileFragment", "loadUserInfo - Token: " + token);
 
-        if (token == null) {
+        if (token == null || token.isEmpty()) {
             Toast.makeText(getContext(), "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
             tvNickname.setText("로그인이 필요합니다");
             tvEmail.setText("");
@@ -99,11 +100,13 @@ public class ProfileFragment extends Fragment {
             return;
         }
 
+        android.util.Log.d("ProfileFragment", "Fetching user profile with token: " + token);
         userRepository.fetchUserProfile(token, new UserRepository.UserProfileCallback() {
             @Override
             public void onSuccess(User user) {
                 if (getActivity() == null || !isAdded()) return;
 
+                android.util.Log.d("ProfileFragment", "User profile fetched successfully: " + user.getUsername());
                 tvNickname.setText(user.getUsername());
                 tvEmail.setText(user.getEmail());
                 tvPoint.setText(String.format("%d P", user.getPoints()));
@@ -112,7 +115,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onError(String message) {
                 if (getActivity() == null || !isAdded()) return;
+                android.util.Log.e("ProfileFragment", "Error fetching user profile: " + message);
+                // 토큰으로 사용자 정보를 가져오는데 실패한 경우, 로그인 상태를 초기화
+                userManager.clearUserSession();
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                // UI 업데이트
+                tvNickname.setText("로그인이 필요합니다");
+                tvEmail.setText("");
+                tvPoint.setText("0P");
             }
         });
     }
