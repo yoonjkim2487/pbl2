@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata:2.6.1")
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
 
     // 카메라X
     implementation("androidx.camera:camera-core:1.3.0-alpha04")

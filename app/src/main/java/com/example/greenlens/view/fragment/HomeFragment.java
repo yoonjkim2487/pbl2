@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.greenlens.R;
 import com.example.greenlens.databinding.FragmentHomeBinding;
+import com.google.android.material.card.MaterialCardView;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -30,12 +34,59 @@ public class HomeFragment extends Fragment {
         NavController navController = Navigation.findNavController(view);
 
         // 클릭 리스너 설정
-        binding.cardPaper.setOnClickListener(v -> navigateToRecycleGuide(navController, "paper"));
-        binding.cardPlastic.setOnClickListener(v -> navigateToRecycleGuide(navController, "plastic"));
-        binding.cardGlass.setOnClickListener(v -> navigateToRecycleGuide(navController, "glass"));
-        binding.cardCan.setOnClickListener(v -> navigateToRecycleGuide(navController, "metal"));
-        binding.cardVinyl.setOnClickListener(v -> navigateToRecycleGuide(navController, "vinyl"));
-        binding.cardStyrofoam.setOnClickListener(v -> navigateToRecycleGuide(navController, "styrofoam"));
+        setupClickListeners(navController);
+        
+        // 애니메이션 적용
+        applyAnimations();
+    }
+
+    private void setupClickListeners(NavController navController) {
+        MaterialCardView[] cards = {
+            binding.cardPaper,
+            binding.cardPlastic,
+            binding.cardGlass,
+            binding.cardCan,
+            binding.cardVinyl,
+            binding.cardStyrofoam
+        };
+
+        String[] types = {"paper", "plastic", "glass", "metal", "vinyl", "styrofoam"};
+
+        for (int i = 0; i < cards.length; i++) {
+            final String type = types[i];
+            cards[i].setOnClickListener(v -> navigateToRecycleGuide(navController, type));
+        }
+    }
+
+    private void applyAnimations() {
+        // 설명 텍스트 페이드인 애니메이션
+        binding.textDescription.setAlpha(0f);
+        binding.textDescription.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .setStartDelay(300)
+                .start();
+
+        // 카드들에 스태거드 애니메이션 적용
+        MaterialCardView[] cards = {
+            binding.cardPaper,
+            binding.cardPlastic,
+            binding.cardGlass,
+            binding.cardCan,
+            binding.cardVinyl,
+            binding.cardStyrofoam
+        };
+
+        for (int i = 0; i < cards.length; i++) {
+            cards[i].setAlpha(0f);
+            cards[i].setTranslationY(100f);
+            cards[i].animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(500)
+                    .setStartDelay(100 + (i * 100))
+                    .start();
+        }
     }
 
     private void navigateToRecycleGuide(NavController navController, String type) {
