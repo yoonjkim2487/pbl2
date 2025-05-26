@@ -99,14 +99,24 @@ public class ShopFragment extends Fragment {
 
     private void initDummyData() {
         // 더미 데이터 추가
+        // 편의점 카테고리
         allCoupons.add(new Coupon("CU", "ABC초코쿠키쿠앤크", 1500, "편의점", "2025-12-31", R.drawable.img_cookie));
+        allCoupons.add(new Coupon("GS25", "오뚜기순후추팝콘", 1700, "편의점", "2025-12-31", R.drawable.img_corn));
+        allCoupons.add(new Coupon("세븐일레븐", "트러플촉촉함박도시락", 6900, "편의점", "2025-12-31", R.drawable.img_lunchbox));
+
+        // 카페 카테고리
         allCoupons.add(new Coupon("스타벅스", "아메리카노", 5000, "카페", "2025-12-31", R.drawable.img_americano));
         allCoupons.add(new Coupon("투썸플레이스", "아이스박스", 7500, "카페", "2025-12-31", R.drawable.img_icebox));
+        allCoupons.add(new Coupon("이디야", "바닐라라떼", 4500, "카페", "2025-12-31", R.drawable.img_ediya));
+        allCoupons.add(new Coupon("할리스", "몬스터아메리카노", 5400, "카페", "2025-12-31", R.drawable.img_hollys));
+
+        // 식당 카테고리
+        allCoupons.add(new Coupon("맥도날드", "맥스파이시상하이버거", 5500, "식당", "2025-12-31", R.drawable.img_mac));
+        allCoupons.add(new Coupon("롯데리아", "리아불고기", 5000, "식당", "2025-12-31", R.drawable.img_ria));
+
+        // 영화 카테고리
         allCoupons.add(new Coupon("CGV", "영화관람권", 9000, "영화", "2025-12-31", R.drawable.img_cgv));
-        allCoupons.add(new Coupon("GS25", "팝콘", 2500, "편의점", "2025-12-31", R.drawable.img_cookie));
-        allCoupons.add(new Coupon("이디야", "카페라떼", 4500, "카페", "2025-12-31", R.drawable.img_americano));
-        allCoupons.add(new Coupon("메가박스", "영화예매권", 9500, "영화", "2025-12-31", R.drawable.img_cgv));
-        allCoupons.add(new Coupon("파스쿠찌", "바닐라라떼", 5500, "카페", "2025-12-31", R.drawable.img_americano));
+        allCoupons.add(new Coupon("롯데시네마", "영화티켓", 9200, "영화", "2025-12-31", R.drawable.img_locinema));
 
         // 초기 데이터 로드
         filterCoupons();
@@ -200,18 +210,16 @@ public class ShopFragment extends Fragment {
 
                     // 카테고리 클릭 이벤트
                     cardView.setOnClickListener(v -> {
-                        // 이전에 선택된 카테고리의 배경색을 흰색으로 변경
-                        resetCategoryBackgrounds();
-
-                        // 선택된 카테고리의 배경색을 main_green으로 변경
-                        cardView.setCardBackgroundColor(requireContext().getColor(R.color.main_green));
-                        textView.setTextColor(requireContext().getColor(R.color.white));
-
-                        // 카테고리 변경 및 필터링
-                        currentCategory = categoryName;
-                        editSearch.setText("");  // 검색어 초기화
-                        currentSearchQuery = "";
-                        filterCoupons();
+                        // 이미 선택된 카테고리를 다시 클릭하면 "전체"로 변경
+                        if (currentCategory.equals(categoryName)) {
+                            resetCategoryBackgrounds();
+                            currentCategory = "전체";
+                            editSearch.setText("");
+                            currentSearchQuery = "";
+                            filterCoupons();
+                        } else {
+                            setSelectedCategory(categoryView, categoryName);
+                        }
                     });
                 }
             } catch (Exception e) {
@@ -237,6 +245,27 @@ public class ShopFragment extends Fragment {
                     cardView.setCardBackgroundColor(requireContext().getColor(R.color.white));
                     textView.setTextColor(requireContext().getColor(R.color.black));
                 }
+            }
+        }
+    }
+
+    private void setSelectedCategory(View categoryView, String categoryName) {
+        if (categoryView != null) {
+            androidx.cardview.widget.CardView cardView = categoryView.findViewById(R.id.card_category);
+            TextView textView = categoryView.findViewById(R.id.text_category);
+            if (cardView != null && textView != null) {
+                // 이전 선택 해제
+                resetCategoryBackgrounds();
+
+                // 현재 카테고리 선택
+                cardView.setCardBackgroundColor(requireContext().getColor(R.color.main_green));
+                textView.setTextColor(requireContext().getColor(R.color.white));
+
+                // 카테고리 변경 및 필터링
+                currentCategory = categoryName;
+                editSearch.setText("");  // 검색어 초기화
+                currentSearchQuery = "";
+                filterCoupons();
             }
         }
     }

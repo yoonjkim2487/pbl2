@@ -28,6 +28,7 @@ import com.example.greenlens.api.ApiClient;
 import com.example.greenlens.api.ApiService;
 import com.example.greenlens.databinding.ActivityCameraBinding;
 import com.example.greenlens.manager.UserManager;
+import com.example.greenlens.model.User;
 import com.example.greenlens.model.response.AnalysisResultResponse;
 import com.example.greenlens.model.response.AnalyzeResponse;
 import com.example.greenlens.view.fragment.ResultBottomSheetDialog;
@@ -46,6 +47,9 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CameraActivity extends AppCompatActivity {
     private ActivityCameraBinding binding;
@@ -402,6 +406,10 @@ public class CameraActivity extends AppCompatActivity {
         );
 
         Log.d(TAG, "API 호출 시작 - 토큰: " + authToken);
+        Log.d(TAG, "원본 토큰: " + userManager.getToken());
+        Log.d(TAG, "로그인 상태: " + userManager.isLoggedIn());
+        Log.d(TAG, "토큰 길이: " + (authToken != null ? authToken.length() : "null"));
+        Log.d(TAG, "토큰 앞 20자: " + (authToken != null && authToken.length() > 20 ? authToken.substring(0, 20) + "..." : authToken));
         Log.d(TAG, "이미지 파일 경로: " + currentPhotoFile.getAbsolutePath());
         Log.d(TAG, "이미지 파일 크기: " + currentPhotoFile.length() + " bytes");
 
@@ -429,17 +437,12 @@ public class CameraActivity extends AppCompatActivity {
 
                         // 403 에러인 경우 특별 처리
                         if (response.code() == 403) {
-                            errorMessage = "권한이 없습니다. 다시 로그인해주세요.";
-                            // 로그인 상태 초기화
-                            userManager.clearUserSession();
+                            errorMessage = "권한이 없습니다. 서버 응답을 확인해주세요.";
+                            Log.e(TAG, "403 오류 발생 - 토큰: " + authToken);
+                            Log.e(TAG, "403 오류 발생 - 원본 토큰: " + userManager.getToken());
 
-                            // 3초 후 로그인 화면으로 이동
-                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                Intent intent = new Intent(CameraActivity.this, LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                            }, 3000);
+                            // 임시로 토큰 삭제하지 않고 로그만 출력
+                            // userManager.clearUserSession();
                         }
 
                         try {
@@ -484,7 +487,7 @@ public class CameraActivity extends AppCompatActivity {
                     String disposalMethod = result.getDisposalMethod();
                     String type = result.getTypeForApp();
 
-                    // 포인트 적립 성공 메시지 표시
+                    // 포인트 적립 요청 추가
                     if (type != null && !type.isEmpty()) {
                         // 포인트 적립 금액 (백엔드 API에 따라 조정 필요)
                         int pointValue = 50;  // 기본값
@@ -499,6 +502,9 @@ public class CameraActivity extends AppCompatActivity {
                         } else if ("metal".equalsIgnoreCase(type)) {
                             pointValue = 100;
                         }
+
+                        // 실제 포인트 적립 요청
+                        addUserPoints(type, pointValue);
 
                         // 포인트 적립 안내 토스트 메시지
                         String wasteTypeKorean = getWasteTypeKorean(type);
@@ -527,6 +533,56 @@ public class CameraActivity extends AppCompatActivity {
 
                 // 테스트용 임의 결과 표시
                 showResult("plastic", null);
+            }
+        });
+    }
+
+    /**
+     * 사용자 포인트를 적립하는 함수
+     * @param wasteType 분리수거한 쓰레기 종류
+     * @param pointValue 적립할 포인트 값
+     */
+    private void addUserPoints(String wasteType, int pointValue) {
+        if (userManager == null || !userManager.isLoggedIn()) {
+            Log.e(TAG, "포인트 적립 실패: 사용자가 로그인되어 있지 않습니다.");
+            return;
+        }
+
+        User currentUser = userManager.getCurrentUser();
+        if (currentUser == null || currentUser.getUserId() == null) {
+            Log.e(TAG, "포인트 적립 실패: 사용자 정보가 없습니다.");
+            return;
+        }
+
+        Long userId = currentUser.getUserId();
+
+        // 서버에 포인트 적립 요청 (API 예시, 실제 백엔드에 맞게 수정 필요)
+        Map<String, Object> pointData = new HashMap<>();
+        pointData.put("points", pointValue);
+        pointData.put("reason", wasteType + " 분리수거 성공");
+        pointData.put("type", "적립");
+
+        // 실제 API 호출 (백엔드에 맞게 구현 필요)
+        apiService.logRecycleActivity(authToken, pointData).enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "포인트 적립 성공: " + pointValue + "P");
+
+                    // 현재 사용자의 포인트 업데이트 (UserManager에 메서드 추가 필요)
+                    if (currentUser != null) {
+                        int updatedPoints = currentUser.getPoints() + pointValue;
+                        currentUser.setPoints(updatedPoints);
+                        userManager.saveUser(currentUser);
+                    }
+                } else {
+                    Log.e(TAG, "포인트 적립 실패: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+                Log.e(TAG, "포인트 적립 API 호출 실패", t);
             }
         });
     }

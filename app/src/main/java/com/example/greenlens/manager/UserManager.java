@@ -84,14 +84,14 @@ public class UserManager {
     public boolean isLoggedIn() {
         boolean tokenExists = token != null && !token.isEmpty();
         boolean isLoggedInPref = preferences.getBoolean(KEY_IS_LOGGED_IN, false);
-        boolean tokenNotExpired = !isTokenExpired();
+        // 토큰 만료 검사는 임시로 제거 (서버에서 토큰 만료 시간을 받을 때까지)
+        // boolean tokenNotExpired = !isTokenExpired();
 
         Log.d(TAG, "isLoggedIn check - tokenExists: " + tokenExists +
-                ", isLoggedInPref: " + isLoggedInPref +
-                ", tokenNotExpired: " + tokenNotExpired);
+                ", isLoggedInPref: " + isLoggedInPref);
 
-        // 메모리에 토큰이 있고, SharedPreferences에 로그인 상태가 저장되어 있고, 토큰이 만료되지 않아야 로그인된 것으로 간주
-        return tokenExists && isLoggedInPref && tokenNotExpired;
+        // 메모리에 토큰이 있고, SharedPreferences에 로그인 상태가 저장되어 있으면 로그인된 것으로 간주
+        return tokenExists && isLoggedInPref;
     }
 
     public void fetchUserProfile(String token, UserProfileCallback callback) {
@@ -193,9 +193,10 @@ public class UserManager {
         editor.putString(KEY_EMAIL, email);
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
 
-        // 토큰 만료 시간 저장 (예: 현재 시간 + 24시간)
-        long expiresAt = System.currentTimeMillis() + (24 * 60 * 60 * 1000); // 24시간
-        editor.putLong("token_expires_at", expiresAt);
+        // 토큰 만료 시간은 서버에서 받아야 하므로 임시로 제거
+        // TODO: 서버에서 토큰 만료 시간을 받아서 저장하도록 수정 필요
+        // long expiresAt = System.currentTimeMillis() + (24 * 60 * 60 * 1000); // 24시간
+        // editor.putLong("token_expires_at", expiresAt);
 
         editor.apply();
 
