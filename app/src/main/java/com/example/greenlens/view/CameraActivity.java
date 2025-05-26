@@ -30,7 +30,7 @@ import com.example.greenlens.databinding.ActivityCameraBinding;
 import com.example.greenlens.manager.UserManager;
 import com.example.greenlens.model.User;
 import com.example.greenlens.model.response.AnalysisResultResponse;
-import com.example.greenlens.model.response.AnalyzeResponse;
+import com.example.greenlens.model.response.AnalyzeResponse;        
 import com.example.greenlens.util.DevLog;
 import com.example.greenlens.view.fragment.ResultBottomSheetDialog;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -395,8 +395,8 @@ public class CameraActivity extends AppCompatActivity {
 
         // 이미지 파일을 MultipartBody.Part로 변환
         RequestBody requestFile = RequestBody.create(
-                MediaType.parse("image/*"),
-                currentPhotoFile
+                currentPhotoFile,
+                MediaType.parse("image/*")
         );
 
         // 'image'라는 이름으로 파일 전송

@@ -24,4 +24,8 @@
     <color name="gray">#9E9E9E</color>
     <color name="background_dark">#263238</color>
     <color name="ripple_color">#1F000000</color>
+    <color name="status_bar_green">#006837</color>
+    <color name="status_bar_dark_green">#004D2A</color>
+    <color name="status_bar_teal">#00796B</color>
+    <color name="status_bar_color">#1B5E20</color>
 </resources>

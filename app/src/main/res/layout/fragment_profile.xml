@@ -1,417 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_green">
+    android:background="@drawable/bg_gradient_home">
 
-    <!-- 상단 타이틀 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_title_profile"
+    <!-- 상단 앱바 -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="프로필"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:fontFamily="@font/jalnan"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- 메인 컨텐츠 영역 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="57dp"
-        android:background="@color/background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <!-- 프로필 이미지 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            app:cardCornerRadius="25dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_user_profile"/>
-        </androidx.cardview.widget.CardView>
-
-        <!-- 닉네임 & 이메일 -->
-        <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="닉네임"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:fontFamily="@font/jalnan"
-            android:layout_marginStart="8dp"
-            app:layout_constraintStart_toEndOf="@id/cv_profile"
-            app:layout_constraintTop_toTopOf="@id/cv_profile"/>
-
-        <TextView
-            android:id="@+id/tv_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="example@gmail.com"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            android:fontFamily="@font/jeongi_anjunche"
-            app:layout_constraintStart_toStartOf="@id/tv_nickname"
-            app:layout_constraintTop_toBottomOf="@id/tv_nickname"/>
-
-        <!-- 포인트 표시 -->
-        <LinearLayout
-            android:id="@+id/layout_point"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintTop_toTopOf="@id/cv_profile"
-            app:layout_constraintBottom_toBottomOf="@id/cv_profile"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_point"
-                android:layout_marginEnd="4dp"/>
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
 
             <TextView
-                android:id="@+id/tv_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5000P"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:fontFamily="@font/jalnan"/>
-        </LinearLayout>
+                android:text="프로필"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:fontFamily="@font/jalnan"
+                android:layout_gravity="center"/>
 
-        <!-- 메뉴 버튼 영역 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_menu"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@id/cv_profile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:weightSum="3">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <!-- 포인트 메뉴 -->
-                <LinearLayout
-                    android:id="@+id/btn_point"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_all_point"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="포인트"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:fontFamily="@font/jeongi_anjunche"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-
-                <!-- 쿠폰함 메뉴 -->
-                <LinearLayout
-                    android:id="@+id/btn_coupon"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_gift"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="쿠폰함"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"
-                        android:fontFamily="@font/jeongi_anjunche"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-
-                <!-- 설정 메뉴 -->
-                <LinearLayout
-                    android:id="@+id/btn_settings"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_setting"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="설정"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:fontFamily="@font/jeongi_anjunche"
-                        android:layout_marginTop="4dp"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-
-        <!-- 재활용 통계 카드들 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/cv_menu"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <!-- 메인 카드 (가장 많이 버린 쓰레기) -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_main_stat"
-                android:layout_width="150dp"
-                android:layout_height="174dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="20dp">
-
-                    <LinearLayout
-                        android:id="@+id/layout_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_alignParentTop="true">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_paper"
-                            android:layout_marginEnd="8dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="종이류"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/jalnan"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="42"
-                        android:textSize="36sp"
-                        android:textColor="@color/black"
-                        android:fontFamily="@font/jalnan"
-                        android:layout_centerInParent="true"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="times"
-                        android:textSize="14sp"
-                        android:textColor="#B8B8B8"
-                        android:fontFamily="@font/jalnan"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="20dp"/>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- 유리병류 카드와 비닐류 카드의 공통 레이아웃 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_sub_stat1"
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <!-- 프로필 카드 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center">
+                    android:padding="24dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_nickname"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingStart="16dp"
-                        android:gravity="start|center_vertical">
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="@font/jalnan"/>
 
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_glass"
-                            android:layout_marginEnd="8dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="유리병류"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/jalnan"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_email"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_marginTop="4dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="23"
-                            android:textColor="@color/black"
-                            android:textSize="22sp"
-                            android:fontFamily="@font/jalnan"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="times"
-                            android:textSize="14sp"
-                            android:textColor="#B8B8B8"
-                            android:fontFamily="@font/jalnan"
-                            android:layout_marginStart="4dp"/>
-                    </LinearLayout>
+                        android:textSize="16sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/jeongi_anjunche"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <!-- 비닐류 카드도 동일한 레이아웃 사용 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_sub_stat2"
-                android:layout_width="150dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="14dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cv_sub_stat1">
+            <!-- 포인트 카드 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
+                android:layout_marginBottom="20dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:rippleColor="@color/ripple_color">
 
-                <!-- 위와 동일한 레이아웃 구조 사용, 단 이미지와 텍스트만 변경 -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="24dp"
+                    android:gravity="center_vertical">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingStart="16dp"
-                        android:gravity="start|center_vertical">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_plastic"
-                            android:layout_marginEnd="8dp"/>
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="비닐류"
-                            android:textColor="@color/black"
+                            android:text="보유 포인트"
                             android:textSize="16sp"
-                            android:fontFamily="@font/jalnan"/>
+                            android:textColor="@color/text_secondary"
+                            android:fontFamily="@font/jeongi_anjunche"/>
+
+                        <TextView
+                            android:id="@+id/tv_point"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="28sp"
+                            android:textColor="@color/main_green"
+                            android:fontFamily="@font/jalnan"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
 
-                    <!-- 숫자와 times 부분은 동일한 구조 유지 -->
-                    <LinearLayout
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/text_secondary"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 메뉴 카드 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- 포인트 내역 버튼 -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_point"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_marginTop="4dp">
+                        android:text="포인트 내역"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="@font/jeongi_anjunche"
+                        android:gravity="start|center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/selectableItemBackground"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        app:icon="@drawable/ic_point_history"
+                        app:iconTint="@color/text_secondary"
+                        app:iconGravity="start"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="18"
-                            android:textColor="@color/black"
-                            android:textSize="22sp"
-                            android:fontFamily="@font/jalnan"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="times"
-                            android:textSize="14sp"
-                            android:textColor="#B8B8B8"
-                            android:fontFamily="@font/jalnan"
-                            android:layout_marginStart="4dp"/>
-                    </LinearLayout>
+                    <!-- 쿠폰함 버튼 -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_coupon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="쿠폰함"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="@font/jeongi_anjunche"
+                        android:gravity="start|center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/selectableItemBackground"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        app:icon="@drawable/ic_coupon"
+                        app:iconTint="@color/text_secondary"
+                        app:iconGravity="start"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider"/>
+
+                    <!-- 설정 버튼 -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="설정"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:fontFamily="@font/jeongi_anjunche"
+                        android:gravity="start|center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/selectableItemBackground"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        app:icon="@drawable/ic_settings"
+                        app:iconTint="@color/text_secondary"
+                        app:iconGravity="start"/>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/bg_gradient_home">
 
     <!-- 상단 앱바 -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/main_green">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
         <!-- 고정될 타이틀 영역 -->
         <androidx.appcompat.widget.Toolbar
@@ -22,9 +23,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="모바일교환권"
+                android:text="포인트 스토어"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="28sp"
                 android:fontFamily="@font/jalnan"
                 android:layout_gravity="center"/>
 
@@ -38,23 +39,30 @@
             android:padding="16dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <!-- 검색창 - 클릭 가능하게 수정 -->
+            <!-- 검색창 -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/layout_search"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="2dp"
+                android:layout_height="56dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
+                app:rippleColor="@color/ripple_color">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="20dp">
+
+                    <ImageView
+                        android:id="@+id/img_search"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/text_secondary"/>
 
                     <EditText
                         android:id="@+id/edit_search"
@@ -62,22 +70,16 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:hint="찾는 상품이 있으신가요?"
-                        android:textColorHint="@color/gray"
+                        android:hint="원하는 상품을 검색해보세요"
+                        android:textColorHint="@color/text_secondary"
                         android:textColor="@color/text_primary"
                         android:textSize="16sp"
                         android:fontFamily="@font/jeongi_anjunche"
                         android:maxLines="1"
+                        android:layout_marginStart="12dp"
                         android:singleLine="true"
                         android:imeOptions="actionSearch"
                         android:inputType="text"/>
-
-                    <ImageView
-                        android:id="@+id/img_search"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search"
-                        app:tint="@color/gray"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
@@ -98,29 +100,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp"
                 app:strokeWidth="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:rippleColor="@color/ripple_color"
                 app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="카테고리별"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:text="카테고리"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
                         android:fontFamily="@font/jalnan"/>
 
                     <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="20dp"
                         android:scrollbars="none">
 
                         <LinearLayout
@@ -132,40 +137,40 @@
                             <include
                                 android:id="@+id/category_cafe"
                                 layout="@layout/item_category"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:layout_marginEnd="12dp"/>
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginEnd="16dp"/>
 
                             <!-- 식당 카테고리 -->
                             <include
                                 android:id="@+id/category_restaurant"
                                 layout="@layout/item_category"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:layout_marginEnd="12dp"/>
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginEnd="16dp"/>
 
                             <!-- 편의점 카테고리 -->
                             <include
                                 android:id="@+id/category_store"
                                 layout="@layout/item_category"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:layout_marginEnd="12dp"/>
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginEnd="16dp"/>
 
                             <!-- 영화 카테고리 -->
                             <include
                                 android:id="@+id/category_movie"
                                 layout="@layout/item_category"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:layout_marginEnd="12dp"/>
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginEnd="16dp"/>
 
                             <!-- 기타 카테고리 -->
                             <include
                                 android:id="@+id/category_etc"
                                 layout="@layout/item_category"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"/>
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"/>
 
                         </LinearLayout>
                     </HorizontalScrollView>
@@ -177,19 +182,21 @@
                 android:id="@+id/text_all_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="전체"
-                android:textColor="@color/black"
-                android:textSize="18sp"
+                android:text="추천 상품"
+                android:textColor="@color/white"
+                android:textSize="22sp"
                 android:fontFamily="@font/jalnan"
-                android:layout_margin="16dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_products"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:paddingHorizontal="12dp"
                 android:clipToPadding="false"
-                android:paddingBottom="16dp"/>
+                android:paddingBottom="24dp"/>
 
             <!-- 추가: 하단 여백 -->
             <View

@@ -1,155 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/bg_gradient_home">
 
-    <!-- 헤더 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutHeader"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/main_green"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="실시간 순위표"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:fontFamily="@font/jalnan"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- 상단 요약 카드 -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardSummary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="2dp"
-        app:strokeWidth="0dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader">
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="match_parent">
 
+            <!-- 헤더 -->
             <TextView
+                android:id="@+id/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="실시간 분리수거 순위"
-                android:textSize="18sp"
-                android:textColor="@color/text_primary"
-                android:fontFamily="@font/jalnan"/>
+                android:text="실시간 순위표"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:fontFamily="@font/jalnan"
+                android:layout_marginTop="24dp"
+                android:elevation="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
+            <!-- 설명 텍스트 -->
             <TextView
                 android:id="@+id/textDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="분리수거를 많이 한 순으로 실시간 순위를 확인해보세요."
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:fontFamily="@font/jeongi_anjunche"/>
+                android:text="함께 지구를 지키는 사람들"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:alpha="0.9"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textTitle"/>
 
-            <LinearLayout
+            <!-- 상단 요약 카드 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSummary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
+                android:layout_margin="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:rippleColor="@color/ripple_color"
+                app:cardBackgroundColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/textDescription">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:gravity="center">
+                    android:padding="20dp">
 
                     <TextView
-                        android:id="@+id/textTotalUsers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1,247"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/main_green"
+                        android:text="실시간 분리수거 현황"
+                        android:textSize="20sp"
+                        android:textColor="@color/text_primary"
                         android:fontFamily="@font/jalnan"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="참여자 수"
-                        android:textSize="12sp"
-                        android:textColor="@color/text_secondary"
-                        android:fontFamily="@font/jeongi_anjunche"/>
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/textTotalUsers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1,247"
+                                android:textSize="24sp"
+                                android:textColor="@color/main_green"
+                                android:fontFamily="@font/jalnan"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="참여자 수"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/jeongi_anjunche"/>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/divider"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/textTotalItems"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="25,897"
+                                android:textSize="24sp"
+                                android:textColor="@color/main_green"
+                                android:fontFamily="@font/jalnan"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="총 분리수거 횟수"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/jeongi_anjunche"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/divider"/>
+            <!-- 순위 리스트 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewRanking"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toBottomOf="@id/cardSummary"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="center">
+            <!-- 로딩 표시 -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:indeterminateTint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/recyclerViewRanking"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <TextView
-                        android:id="@+id/textTotalItems"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="25,897"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/main_green"
-                        android:fontFamily="@font/jalnan"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="총 분리수거 횟수"
-                        android:textSize="12sp"
-                        android:textColor="@color/text_secondary"
-                        android:fontFamily="@font/jeongi_anjunche"/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- 순위 리스트 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewRanking"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:paddingTop="8dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/cardSummary"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <!-- 로딩 표시 -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/recyclerViewRanking"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
